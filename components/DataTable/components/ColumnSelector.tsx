@@ -11,7 +11,7 @@ const ColumnSelector = ({
 	toggleColumnVisibility: (key: string) => void;
 	onClose: () => void;
 }) => (
-	<div className=" hidden absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-10">
+	<div className=" absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-10">
 		<div className="p-2">
 			<h3 className="text-sm font-medium text-gray-900 dark:text-white mb-2">
 				Columnas visibles

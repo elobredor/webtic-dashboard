@@ -1,5 +1,5 @@
 import { Order } from "@/Models/Order";
-import { formatDate } from "@/utils/formatters";
+import { formatCurrency, formatDate } from "@/utils/formatters";
 
 export const columns = [
 	{ key: "id", title: "ID", sortable: true },
@@ -13,7 +13,12 @@ export const columns = [
 			</>
 		),
 	},
-	{ key: "montoTotal", title: "Total", sortable: true },
+	{
+		key: "montoTotal",
+		title: "Total",
+		sortable: true,
+		render: (value: number) => <span>{formatCurrency(value)}</span>,
+	},
 	{ key: "estadoPago", title: "Estado P.", sortable: true },
 	{
 		key: "estado",
