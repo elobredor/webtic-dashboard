@@ -1,16 +1,29 @@
 "use client";
 import Link from "next/link";
 import { links } from "@/data/links";
-import { LogOut, Home, FileText, HelpCircle, UserCheck } from "lucide-react";
+import {
+	LogOut,
+	Home,
+	FileText,
+	HelpCircle,
+	UserCheck,
+	ShoppingCart,
+	Package,
+	Archive,
+	Store,
+	Users,
+} from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { usePathname } from "next/navigation"; // Reemplazamos useRouter por usePathname
 
 // Icon mapping object
 const iconMap = {
-	"dashboard-icon": Home,
-	"solicitudes-icon": FileText,
-	"pqr-icon": HelpCircle,
-	"vendedores-icon": UserCheck,
+	Dashboard: Home,
+	Solicitudes: UserCheck,
+	PQRS: Archive,
+	Vendedores: Users,
+	Productos: ShoppingCart,
+	Pedidos: Package,
 };
 
 const Sidebar = () => {
@@ -22,7 +35,7 @@ const Sidebar = () => {
 			<nav className="p-2">
 				<ul className="space-y-2">
 					{links.map((link) => {
-						const Icon = iconMap[link.icon];
+						const Icon = iconMap[link.label];
 						const isActive = pathname === link.href; // Comprobar si el link es activo
 
 						return (
