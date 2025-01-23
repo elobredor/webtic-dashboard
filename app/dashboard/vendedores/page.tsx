@@ -1,6 +1,6 @@
 import DataTable from "@/components/DataTable/DataTable";
 
-export default function Request() {
+export default function Vendedores() {
 	const data = [
 		{ id: 1, name: "John Doe", request: "Request 1", status: "Pending" },
 		{ id: 2, name: "Jane Smith", request: "Request 2", status: "Approved" },
@@ -15,8 +15,8 @@ export default function Request() {
 	];
 	return (
 		<div>
-			<h1 className="text-2xl font-bold">Solicitudes</h1>
-			<p>Content for Solicitudes</p>
+			<h1 className="text-2xl font-bold">Vendedores</h1>
+			<p>Listado de vendedores</p>
 			<DataTable data={data} columns={columns} tableId={""} />
 		</div>
 	);

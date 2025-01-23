@@ -3,9 +3,7 @@
 import { api } from "@/services/api";
 import { AuthContextType, AuthState } from "../Models/auth";
 import { User } from "../Models/User";
-
 import { storage } from "@/utils/storage";
-
 import { createContext, useContext, useEffect, useState } from "react";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -51,13 +49,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 		const initializeAuth = async () => {
 			const storedUser = storage.getUser();
 			const token = storage.getToken();
+			console.log("storedUser", storedUser);
 
-			if (storedUser && token) {
+			if (storedUser !== null && token) {
 				try {
-					// Optional: Validate token with backend
-					// const isValid = await api.auth.validateToken(token);
-					// if (!isValid) throw new Error('Invalid token');
-
 					setAuthenticated(storedUser);
 				} catch (error: any) {
 					storage.clearAuth();
