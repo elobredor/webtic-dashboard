@@ -3,8 +3,8 @@ import "./globals.css";
 import { RoutesProvider } from "@/context/routesContext";
 
 export const metadata = {
-	title: "Next.js App",
-	description: "Next.js App with Sidebar and Login",
+	title: "Admin panel",
+	description: "Admin panel mercabaq",
 };
 
 export default function RootLayout({

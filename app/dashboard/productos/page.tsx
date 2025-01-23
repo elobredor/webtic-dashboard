@@ -3,13 +3,13 @@ import React, { useState } from "react";
 import DataTable from "@/components/DataTable/DataTable";
 import useFetchData from "@/hooks/useFetchData";
 import { api } from "@/services/api";
-import PQRDetailModal from "./components/PQrDetailModal";
+
 import { PQR } from "@/data/PQR";
 import { Eye } from "lucide-react";
-import { columns } from "./columnConfig";
+// import { columns } from "./columnConfig";
 
-const PqrTable = () => {
-	const { data, loading } = useFetchData(api.pqr.getAll, "pqr"); // ahora envio el string, este hook deberia 1. encontrar la interface PQR, 2. hacer devolver el formato de columnas
+const ProductsView = () => {
+	const { data, loading } = useFetchData(api.order.getAll, "products"); // ahora envio el string, este hook deberia 1. encontrar la interface PQR, 2. hacer devolver el formato de columnas
 	const [modalOpen, setModalOpen] = useState(false);
 	const [selectedPQR, setSelectedPQR] = useState<PQR | undefined>();
 
@@ -30,25 +30,18 @@ const PqrTable = () => {
 	// declarar la funcion
 	return (
 		<div>
-			<h1 className="text-2xl font-bold">PQRS</h1>
-			<p>Listado de PQRS</p>
-			<PQRDetailModal
-				isOpen={modalOpen}
-				onClose={() => {
-					setModalOpen(false);
-				}}
-				pqrDetails={selectedPQR}
-			/>
+			<h1 className="text-2xl font-bold">Productos</h1>
+			<p>Listado de Prodcutos</p>
 
-			<DataTable
+			{/* <DataTable
 				columns={columns}
 				data={data}
-				tableId="pqrs-table"
+				tableId="products-table"
 				loading={loading}
 				renderActions={renderActions}
-			/>
+			/> */}
 		</div>
 	);
 };
 
-export default PqrTable;
+export default ProductsView;

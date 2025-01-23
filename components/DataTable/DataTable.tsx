@@ -51,11 +51,12 @@ const DataTable: React.FC<DataTableProps> = ({
 			? new Set(JSON.parse(savedColumns))
 			: new Set(columns.map((col) => col.key));
 	});
+	const safeData = Array.isArray(data) ? data : [];
 
 	// Reset to the first page when search term, page size, or data changes
 	useEffect(() => {
 		setCurrentPage(1);
-	}, [searchTerm, pageSize, data.length]);
+	}, [searchTerm, pageSize]);
 
 	// Save visible columns to localStorage whenever they change
 	useEffect(() => {
@@ -74,9 +75,9 @@ const DataTable: React.FC<DataTableProps> = ({
 	};
 
 	const filteredData = useMemo(() => {
-		if (!searchTerm) return data;
+		if (!searchTerm) return safeData;
 
-		return data.filter((item) =>
+		return safeData.filter((item) =>
 			Object.entries(item).some(([key, value]) => {
 				if (visibleColumns.has(key) && value !== null && value !== undefined) {
 					return String(value).toLowerCase().includes(searchTerm.toLowerCase());
@@ -84,7 +85,7 @@ const DataTable: React.FC<DataTableProps> = ({
 				return false;
 			})
 		);
-	}, [data, searchTerm, visibleColumns]);
+	}, [safeData, searchTerm, visibleColumns]);
 
 	const sortedData = useMemo(() => {
 		if (!sortConfig) return filteredData;

@@ -1,7 +1,7 @@
 export interface LinkItem {
 	href: string;
 	label: string;
-	icon: string; // Añadido para incluir iconos
+	icon: string;
 }
 
 export const links: LinkItem[] = [
@@ -11,8 +11,9 @@ export const links: LinkItem[] = [
 		label: "Solicitudes",
 		icon: "solicitudes-icon",
 	},
-	// { href: "/dashboard/config", label: "Config", icon: "config-icon" },
-	{ href: "/dashboard/pqrs", label: "PQR", icon: "pqr-icon" },
+	{ href: "/dashboard/pqrs", label: "PQRS", icon: "pqr-icon" },
+	{ href: "/dashboard/productos", label: "Productos", icon: "pqr-icon" },
+	{ href: "/dashboard/pedidos", label: "Pedidos", icon: "pqr-icon" },
 	{
 		href: "/dashboard/vendedores",
 		label: "Vendedores",
