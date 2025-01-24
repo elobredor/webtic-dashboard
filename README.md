@@ -101,14 +101,10 @@ El proyecto utiliza la librería **Webtic UI**, que es un conjunto de componente
    **Ejemplo:**
 
    ```tsx
-   import { Button, Card } from "webtic-ui";
+   import { Datatable } from "webtic-ui";
 
    const MyComponent = () => {
-   	return (
-   		<Card>
-   			<Button>Haz clic aquí</Button>
-   		</Card>
-   	);
+   	return <DataTable data={data} columns={columns} tableId={"seller"} />;
    };
    ```
 
