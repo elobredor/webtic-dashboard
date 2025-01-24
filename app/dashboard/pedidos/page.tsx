@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import DataTable from "@/components/DataTable/DataTable";
+import { DataTable } from "webtic-ui";
 import useFetchData from "@/hooks/useFetchData";
 import { api } from "@/services/api";
 

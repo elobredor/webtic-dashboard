@@ -5,6 +5,8 @@ import { AuthContextType, AuthState } from "../Models/auth";
 import { User } from "../Models/User";
 import { storage } from "@/utils/storage";
 import { createContext, useContext, useEffect, useState } from "react";
+import { Router } from "next/router";
+import { redirect } from "next/navigation";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const initialState: AuthState = {
@@ -88,13 +90,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 	const logout = async () => {
 		const confirmLogout = window.confirm("Seguro deseas cerrar sesión?");
 		if (!confirmLogout) return;
-
+		setUnauthenticated(); // esto deberia hacer que se enrute a login usando el context router
 		storage.clearAuth();
-		// await api.user.logout();
-		if (window.location.pathname.includes("/mercabaq/mi-negocio")) {
-			window.location.href = "/mercabaq/login";
-		}
-		setUnauthenticated();
+		redirect("/auth/login");
 	};
 
 	const clearError = () => {

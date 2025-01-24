@@ -1,12 +1,12 @@
 "use client";
 import React, { useState } from "react";
-import DataTable from "@/components/DataTable/DataTable";
 import useFetchData from "@/hooks/useFetchData";
 import { api } from "@/services/api";
 import PQRDetailModal from "./components/PQrDetailModal";
 import { PQR } from "@/data/PQR";
 import { Eye } from "lucide-react";
 import { columns } from "./columnConfig";
+import { DataTable } from "webtic-ui";
 
 const PqrTable = () => {
 	const { data, loading } = useFetchData(api.pqr.getAll, "pqr"); // ahora envio el string, este hook deberia 1. encontrar la interface PQR, 2. hacer devolver el formato de columnas

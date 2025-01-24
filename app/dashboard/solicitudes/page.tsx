@@ -1,4 +1,5 @@
-import DataTable from "@/components/DataTable/DataTable";
+"use client";
+import { DataTable } from "webtic-ui";
 
 export default function Request() {
 	const data = [

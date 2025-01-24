@@ -34,7 +34,7 @@ export const Login = () => {
 	};
 
 	return (
-		<div className="min-h-screen min-w-screen  flex items-center justify-center">
+		<div className="min-h-screen min-w-screen bg-slate-100  flex items-center justify-center">
 			<div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md z-10">
 				<div className="flex items-center justify-center mb-8">
 					{/* <img 
@@ -42,7 +42,7 @@ export const Login = () => {
           alt="Company Logo"
           className={`sidebar-logo transition-all duration-300 object-contain`}
         /> */}
-					<h1>MERCABAQ</h1>
+					<h1>[NOMBRE EMPRESA/LOGO]</h1>
 				</div>
 
 				{error && (
