@@ -18,7 +18,7 @@ export default function Vendedores() {
 		<div>
 			<h1 className="text-2xl font-bold">Vendedores</h1>
 			<p>Listado de vendedores</p>
-			<DataTable data={data} columns={columns} tableId={""} />
+			<DataTable data={data} columns={columns} tableId={"seller"} />
 		</div>
 	);
 }

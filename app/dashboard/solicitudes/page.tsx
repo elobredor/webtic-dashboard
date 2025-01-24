@@ -18,7 +18,7 @@ export default function Request() {
 		<div>
 			<h1 className="text-2xl font-bold">Solicitudes</h1>
 			<p>Listado de solicitudes</p>
-			<DataTable data={data} columns={columns} tableId={""} />
+			<DataTable data={data} columns={columns} tableId={"request"} />
 		</div>
 	);
 }

@@ -1,9 +1,6 @@
 "use client";
-
 import { useRouter } from "next/navigation";
-
 import { useEffect, useState } from "react";
-
 import { Users, DollarSign, Store } from "lucide-react";
 
 const Dashboard = () => {
@@ -18,9 +15,9 @@ const Dashboard = () => {
 			try {
 				setLoading(true);
 
-				setActiveUsers(2);
-				setPendingOrders(55);
-				setMonthlyIncome(12450);
+				setActiveUsers(9);
+				setPendingOrders(99);
+				setMonthlyIncome(99999);
 			} catch (error) {
 				console.error("Error cargando datos del dashboard:", error);
 			} finally {
