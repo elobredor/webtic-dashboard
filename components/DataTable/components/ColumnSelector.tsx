@@ -1,15 +1,19 @@
 import { Column } from "@/data/Column";
 
-const ColumnSelector = ({
-	columns,
-	visibleColumns,
-	toggleColumnVisibility,
-	onClose,
-}: {
+import { FC } from "react";
+
+interface ColumnSelectorProps {
 	columns: Column[];
 	visibleColumns: Set<string>;
 	toggleColumnVisibility: (key: string) => void;
 	onClose: () => void;
+}
+
+const ColumnSelector: FC<ColumnSelectorProps> = ({
+	columns,
+	visibleColumns,
+	toggleColumnVisibility,
+	onClose,
 }) => (
 	<div className=" absolute right-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-10">
 		<div className="p-2">

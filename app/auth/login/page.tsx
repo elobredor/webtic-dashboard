@@ -2,10 +2,8 @@
 
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
-// import { AuthService } from "../services/auth.service";
-// import { useAuth } from "@/context/AuthContext";
+import { useState } from "react";
 
 export const Login = () => {
 	const [email, setEmail] = useState("");
@@ -23,7 +21,7 @@ export const Login = () => {
 		setLoading(true);
 
 		try {
-			const result = await login(email, password);
+			const result = login(email, password);
 			// guardar este resultado en cache y guardarlo en el context
 			console.log("esto responde el asunto", result);
 

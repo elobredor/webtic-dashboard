@@ -16,4 +16,5 @@ export interface AuthContextType {
 	isChecking: boolean;
 	setAuth: (user: User, token: string, negocio: any) => void;
 	updateUser: (key: string, value: any) => void;
+	login: (email: string, password: string) => void;
 }

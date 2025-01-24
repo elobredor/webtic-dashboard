@@ -13,14 +13,10 @@ export default function RootLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<html lang="en">
+		<html lang="es">
 			<body>
 				<AuthProvider>
-					<RoutesProvider>
-						<div className="flex h-screen bg-gray-100">
-							<div className="flex-1 p-6">{children}</div>
-						</div>
-					</RoutesProvider>
+					<RoutesProvider>{children}</RoutesProvider>
 				</AuthProvider>
 			</body>
 		</html>
