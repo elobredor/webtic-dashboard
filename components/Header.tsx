@@ -12,18 +12,9 @@ const Header = () => {
 			</div>
 			<div className="flex items-center space-x-2">
 				<div className="flex items-center space-x-2">
-					{/* Imagen del usuario */}
-					{user?.avatar ? (
-						<img
-							src={user.avatar}
-							alt="Avatar de usuario"
-							className="w-10 h-10 rounded-full"
-						/>
-					) : (
-						<div className="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center text-sm font-semibold">
-							{user?.name ? user.name[0].toUpperCase() : "U"}
-						</div>
-					)}
+					<div className="w-10 h-10 rounded-full bg-gray-600 flex items-center justify-center text-sm font-semibold">
+						{user?.name ? user.name[0].toUpperCase() : "U"}
+					</div>
 					<div>
 						<p className="text-sm font-medium">{user?.name || "Usuario"}</p>
 						<p className="text-xs text-gray-400">{user?.email || "Sin correo"}</p>

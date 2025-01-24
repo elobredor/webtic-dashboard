@@ -15,7 +15,7 @@ import {
 import { useAuth } from "@/context/AuthContext";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { links } from "@/data/links";
+import { links } from "@/data/Links";
 
 // Icon mapping object
 const iconMap = {
