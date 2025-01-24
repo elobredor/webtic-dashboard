@@ -1,5 +1,5 @@
 export const API_CONFIG = {
-	baseURL: process.env.API_URL || "https://jointerp.com:12098/api/v1",
+	baseURL: process.env.API_URL || "https://cualquierapi.com",
 	timeout: 10000,
 	headers: {
 		"Content-Type": "application/json",
