@@ -29,11 +29,12 @@ export const RoutesProvider: React.FC<{ children: React.ReactNode }> = ({
 
 		if (user) {
 			// If user is authenticated, navigate to the dashboard
-			if (pathname === `/auth/login` || pathname === `/auth/register`) {
+			if (pathname === `/auth/login`) {
 				router.push(`/dashboard`);
 			}
 		} else {
 			router.push(`/auth/login`);
+			console.log("entra aqui");
 		}
 	};
 

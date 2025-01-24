@@ -51,8 +51,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 		const initializeAuth = async () => {
 			const storedUser = storage.getUser();
 			const token = storage.getToken();
-			console.log("storedUser", storedUser);
-
 			if (storedUser !== null && token) {
 				try {
 					setAuthenticated(storedUser);
@@ -92,7 +90,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 		if (!confirmLogout) return;
 		setUnauthenticated(); // esto deberia hacer que se enrute a login usando el context router
 		storage.clearAuth();
-		redirect("/auth/login");
+		// redirect("/auth/login");
 	};
 
 	const clearError = () => {
