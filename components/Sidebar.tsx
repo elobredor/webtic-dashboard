@@ -11,6 +11,7 @@ import {
 	ChevronUp,
 	LogOut,
 	Copy,
+	User,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { usePathname } from "next/navigation";
@@ -25,6 +26,7 @@ const iconMap = {
 	Vendedores: Users,
 	Productos: ShoppingCart,
 	Pedidos: Package,
+	Clientes: User,
 	INCISOS: Copy,
 };
 
