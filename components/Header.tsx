@@ -1,5 +1,6 @@
 "use client";
 import { useAuth } from "@/context/AuthContext";
+import Image from "next/image";
 
 const Header = () => {
 	const { user } = useAuth(); // Obtén la información del usuario desde el contexto
@@ -7,14 +8,20 @@ const Header = () => {
 	return (
 		<header className="w-full bg-gray-800 text-white p-4 flex items-center justify-between shadow-md">
 			<div className="text-xl font-bold">
-				<h1>Portal administrador</h1>
-				<h4>[LOGO EMPRESA]</h4>
+				<h4 className="font-volkswagen">Portal administrativo</h4>
+
+				<Image
+					src={"/logoblanco.png"}
+					alt="Company Logo"
+					className={`sidebar-logo transition-all duration-300 object-contain`}
+					width={250}
+					height={250}
+				/>
 			</div>
 			<div className="flex items-center space-x-2">
 				<div className="flex items-center space-x-2">
-					{/* Imagen del usuario */}
 					{user?.avatar ? (
-						<img
+						<Image
 							src={user.avatar}
 							alt="Avatar de usuario"
 							className="w-10 h-10 rounded-full"

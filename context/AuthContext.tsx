@@ -5,8 +5,8 @@ import { AuthContextType, AuthState } from "../Models/auth";
 import { User } from "../Models/User";
 import { storage } from "@/utils/storage";
 import { createContext, useContext, useEffect, useState } from "react";
-import { Router } from "next/router";
 import { redirect } from "next/navigation";
+import { useRouter } from "next/router";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const initialState: AuthState = {
@@ -80,6 +80,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
 			storage.setAuth(userAct, accessToken, negocio);
 			setAuthenticated(userAct);
+
 			return response.data;
 		} catch (error) {
 			setError("Invalid credentials");

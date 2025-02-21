@@ -23,7 +23,7 @@ const iconMap = {
 	Dashboard: Home,
 	Solicitudes: UserCheck,
 	PQRS: Archive,
-	Vendedores: Users,
+	Usuarios: Users,
 	Productos: ShoppingCart,
 	Pedidos: Package,
 	Clientes: User,

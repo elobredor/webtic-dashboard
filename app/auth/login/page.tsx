@@ -1,6 +1,7 @@
 "use client";
 
 import { useAuth } from "@/context/AuthContext";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 
 import { useState } from "react";
@@ -27,22 +28,24 @@ export const Login = () => {
 
 			router.push("/dashboard");
 		} catch (err: any) {
-			setError(err.message || "Error al conectar con el servidor");
+			setError(err || "Error al conectar con el servidor");
+			console.log("error en login", err);
 		} finally {
 			setLoading(false);
 		}
 	};
 
 	return (
-		<div className="min-h-screen min-w-screen bg-slate-100  flex items-center justify-center">
+		<div className="min-h-screen min-w-screen bg-secondary  flex items-center justify-center">
 			<div className="bg-white p-8 rounded-lg shadow-md w-full max-w-md z-10">
 				<div className="flex items-center justify-center mb-8">
-					{/* <img 
-          src={`assets/img/mini-logo.png`}
-          alt="Company Logo"
-          className={`sidebar-logo transition-all duration-300 object-contain`}
-        /> */}
-					<h1>[NOMBRE EMPRESA/LOGO]</h1>
+					<Image
+						src={"/logo.png"}
+						alt="Company Logo"
+						className={`sidebar-logo transition-all duration-100 object-contain`}
+						width={300}
+						height={300}
+					/>
 				</div>
 
 				{error && (
@@ -102,6 +105,7 @@ export const Login = () => {
 						{loading ? "Iniciando sesión..." : "Ingresar"}
 					</button>
 				</form>
+				<h2></h2>
 			</div>
 		</div>
 	);

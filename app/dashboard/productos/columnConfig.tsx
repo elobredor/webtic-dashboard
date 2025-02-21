@@ -1,25 +1,24 @@
-import { formatCurrency } from "@/utils/formatters"; // Formatear precios
+import { formatCurrency } from "@/utils/formatters";
 
 export const columns = [
-	{ key: "id", title: "ID", sortable: true },
-	{ key: "name", title: "Nombre", sortable: true },
 	{
-		key: "image",
-		title: "Imagen",
-		sortable: false,
-		render: (value: string) => (
-			<img
-				src={value}
-				alt="Producto"
-				className="w-16 h-16 object-cover rounded-lg"
-			/>
-		),
+		key: "id",
+		title: "ID",
+		sortable: true,
+		editable: false,
+	},
+	{
+		key: "name",
+		title: "Nombre",
+		sortable: true,
+		type: "text",
 	},
 
 	{
 		key: "freeShipping",
 		title: "Envío Gratis",
 		sortable: true,
+		type: "boolean",
 		render: (value: boolean) => (
 			<span
 				className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
@@ -34,6 +33,7 @@ export const columns = [
 		key: "status",
 		title: "Estado",
 		sortable: true,
+		type: "boolean",
 		render: (value: boolean) => (
 			<span
 				className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
@@ -44,26 +44,58 @@ export const columns = [
 			</span>
 		),
 	},
-	{ key: "stock", title: "Stock", sortable: true },
+	{
+		key: "stock",
+		title: "Stock",
+		sortable: true,
+		type: "number",
+	},
 	{
 		key: "price",
 		title: "Precio",
 		sortable: true,
-		render: (value: any) => <span>{formatCurrency(value)}</span>,
+		type: "number",
+		render: (value: number) => <span>{formatCurrency(value)}</span>,
 	},
-	{ key: "um", title: "Unidad de Medida", sortable: true },
+	{
+		key: "um",
+		title: "Unidad de Medida",
+		sortable: true,
+		type: "text",
+	},
 	{
 		key: "rating",
 		title: "Calificación",
 		sortable: true,
+		type: "number",
 	},
-	{ key: "nombrecategoria", title: "Categoría", sortable: true },
-	{ key: "nombremarca", title: "Marca", sortable: true },
-	{ key: "tipoenvio", title: "Tipo de Envío", sortable: true },
+	{
+		key: "nombrecategoria",
+		title: "Categoría",
+		sortable: true,
+		type: "text",
+	},
+	{
+		key: "nombremarca",
+		title: "Marca",
+		sortable: true,
+		type: "text",
+	},
+	{
+		key: "tipoenvio",
+		title: "Tipo de Envío",
+		sortable: true,
+		type: "text",
+	},
 	{
 		key: "disponible",
 		title: "Disponible",
 		sortable: true,
+		type: "select",
+		options: [
+			{ label: "Sí", value: "SI" },
+			{ label: "No", value: "NO" },
+		],
 		render: (value: string | undefined) => (
 			<span
 				className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
@@ -82,9 +114,15 @@ export const columns = [
 		key: "vendedor",
 		title: "Vendedor",
 		sortable: true,
+		type: "text",
 		render: (value: string | undefined) => (
 			<span>{value || "Sin información"}</span>
 		),
 	},
-	{ key: "sales", title: "Ventas", sortable: true },
+	{
+		key: "sales",
+		title: "Ventas",
+		sortable: true,
+		type: "number",
+	},
 ];

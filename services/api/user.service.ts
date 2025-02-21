@@ -34,4 +34,8 @@ export const userService = {
 		const response = await axiosInstance.post("/user/updatep", data);
 		return response.data;
 	},
+	getAll: async () => {
+		const response = await axiosInstance.get(`/user/get/`);
+		return response?.data;
+	},
 };

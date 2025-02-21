@@ -8,12 +8,44 @@ export default function Request() {
 		{ id: 3, name: "Sam Johnson", request: "Request 3", status: "Rejected" },
 	];
 
-	const columns = [
-		{ Header: "ID", accessor: "id", key: "id", title: "ID" },
-		{ Header: "Name", accessor: "name", key: "name", title: "Name" },
-		{ Header: "Request", accessor: "request", key: "request", title: "Request" },
-		{ Header: "Status", accessor: "status", key: "status", title: "Status" },
-	];
+  const columns = [
+    { 
+      Header: "ID", 
+      accessor: "id", 
+      key: "id", 
+      title: "ID" 
+    },
+    { 
+      Header: "Razón Social", 
+      accessor: "nombreRazonSocial", 
+      key: "nombreRazonSocial", 
+      title: "Razón Social" 
+    },
+    { 
+      Header: "Nombre", 
+      accessor: "nombreMostrar", 
+      key: "nombreMostrar", 
+      title: "Nombre" 
+    },
+    { 
+      Header: "Documento", 
+      accessor: "numeroDocumento", 
+      key: "numeroDocumento", 
+      title: "Número de Documento" 
+    },
+    { 
+      Header: "Estado", 
+      accessor: (row) => row.estado ? "Activo" : "Inactivo",
+      key: "estado", 
+      title: "Estado" 
+    },
+    {
+      Header: "Pedidos",
+      accessor: "cantPedidos",
+      key: "cantPedidos",
+      title: "Cantidad de Pedidos"
+    }
+  ];
 	return (
 		<div>
 			<h1 className="text-2xl font-bold">Solicitudes</h1>
