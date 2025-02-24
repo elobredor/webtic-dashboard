@@ -22,7 +22,7 @@ export const RequestService = {
 		return response?.data;
 	},
 	reject: async (id: number, comentario: string) => {
-		const response = await axiosInstance.post("negocio/update", {
+		const response = await axiosInstance.post("negocio/decline", {
 			id: id,
 			comentario: comentario,
 		});
