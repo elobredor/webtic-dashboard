@@ -2,37 +2,24 @@
 
 import { useAuth } from "@/context/AuthContext";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+
 
 import { useState } from "react";
 
 export const Login = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
-	const [error, setError] = useState("");
+	const { login, error} = useAuth();
+
 	const [loading, setLoading] = useState(false);
-	const router = useRouter();
 
-	const { login } = useAuth();
-
-	const handleSubmit = async (e: React.FormEvent) => {
+	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
-
-		setError("");
+	
 		setLoading(true);
-
-		try {
-			const result = login(email, password);
-			// guardar este resultado en cache y guardarlo en el context
-			console.log("esto responde el asunto", result);
-
-			router.push("/dashboard");
-		} catch (err: any) {
-			setError(err || "Error al conectar con el servidor");
-			console.log("error en login", err);
-		} finally {
-			setLoading(false);
-		}
+		login(email, password);
+		setLoading(false);
+	
 	};
 
 	return (

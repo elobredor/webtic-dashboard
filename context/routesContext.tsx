@@ -18,7 +18,7 @@ export const RoutesProvider: React.FC<{ children: React.ReactNode }> = ({
 
 	const router = useRouter();
 	const pathname = usePathname();
-	console.log(pathname, "esto es la ruta", user);
+
 
 	const checkAccess = () => {
 		if (isChecking) {

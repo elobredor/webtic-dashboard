@@ -5,8 +5,7 @@ import { AuthContextType, AuthState } from "../Models/auth";
 import { User } from "../Models/User";
 import { storage } from "@/utils/storage";
 import { createContext, useContext, useEffect, useState } from "react";
-import { redirect } from "next/navigation";
-import { useRouter } from "next/router";
+import { redirect, useRouter } from "next/navigation";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const initialState: AuthState = {
@@ -21,6 +20,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 }) => {
 	const [state, setState] = useState<AuthState>(initialState);
 	const [isChecking, setIsChecking] = useState(true);
+	const router = useRouter();
 
 	const updateState = (updates: Partial<AuthState>) => {
 		setState((prev) => ({ ...prev, ...updates }));
@@ -77,13 +77,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 			const response = await api.user.login({ email, password });
 
 			const { userAct, accessToken, negocio } = response.data;
+			if (userAct.rol !== 3) {
+				const errorMessage = "Este usuario no es administrador";
+				setError(errorMessage);
+				throw new Error(errorMessage);
+			}
 
 			storage.setAuth(userAct, accessToken, negocio);
 			setAuthenticated(userAct);
+			router.push("/dashboard");
+			
 
-			return response.data;
-		} catch (error) {
-			setError("Invalid credentials");
+		
+		} catch (error: any) {
+			if (error.message === "Este usuario no es administrador") {
+				setError(error.message);
+			} else {
+				setError("Credenciales incorrectas");
+			}
 			throw error;
 		}
 	};
