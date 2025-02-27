@@ -7,7 +7,7 @@ export const OrderService = {
 		return response?.data;
 	},
 	getAll: async () => {
-		const response = await axiosInstance.get("/pedido/get");
+		const response = await axiosInstance.get("/pedido/getAll");
 		return response?.data?.data;
 	},
 	// createPaySession: async (data: Checkout) => {

@@ -13,7 +13,7 @@ const PedidosView = () => {
 	const [modalOpen, setModalOpen] = useState(false);
 	const [selectedOrder, setSelectedOrder] = useState<Order>();
 	const [orderDetails, setOrderDetails] = useState<OrderDetail[]>([]);
-	const filteredData = data?.data?.filter((item) => item.rol === 1);
+
 
 	const getOrderDetail = async (id: number) => {
 		try {
@@ -75,16 +75,7 @@ const PedidosView = () => {
 					>
 						<Eye className="h-4 w-4" />
 					</button>
-					<button
-						onClick={() => {
-							setSelectedOrder(row);
-							//   setCreateModalVisible(true);
-						}}
-						className="px-4 py-2 border-2 border-blue-400 text-blue-400 rounded-md hover:bg-blue-400 hover:text-white transition"
-						title="ayuda"
-					>
-						<MessageCircleQuestion className="h-4 w-4" />
-					</button>
+				
 				</div>
 			),
 		},
@@ -98,9 +89,11 @@ const PedidosView = () => {
 
 			<DataTable
 				columns={columns}
-				data={filteredData}
+				data={data?.data}
 				tableId="orders-table"
 				loading={loading}
+			
+	
 			/>
 
 			<Modal

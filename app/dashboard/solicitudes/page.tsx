@@ -12,7 +12,7 @@ import RequestDetailModal from "./components/DetailModal";
 // de una ir a corregir lo de cuando se envia la solicitud en mercabaq
 
 export default function Request() {
-	const { data } = useFetchData(api.request.getAll, "request");
+	const { data, refetch } = useFetchData(api.request.getAll, "request");
 	const [modalOpen, setModalOpen] = useState(false);
 	const [selectedRequest, setSelectedRequest] = useState(null);
 
@@ -51,11 +51,12 @@ export default function Request() {
 		<div>
 			<h1 className="text-2xl font-bold">Solicitudes</h1>
 			<p>Listado de solicitudes</p>
-			<DataTable data={data} columns={columnsWithActions} tableId={""} />
+			<DataTable data={data} columns={columnsWithActions} tableId={""}  onRefresh={refetch}/>
 			<RequestDetailModal
 				request={selectedRequest}
 				isOpen={modalOpen}
 				onClose={handleCloseModal}
+				refetch={refetch}
 			/>
 		</div>
 	);

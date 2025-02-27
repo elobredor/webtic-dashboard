@@ -1,33 +1,32 @@
 "use client";
 
+import { typeDocs } from "@/data/typeDocuments";
 import { api } from "@/services/api";
-import { X, Send, XCircle, FileText } from "lucide-react";
+import { X, Send, XCircle, FileText, Loader } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 
-const DocumentLink = ({ title, pdfPath }) => (
-	<div className="border rounded-lg p-4">
-		<h4 className="font-medium mb-2">{title}</h4>
-		{pdfPath ? (
-			<Link
-				href={pdfPath}
-				target="_blank"
-				rel="noopener noreferrer"
-				className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 hover:underline"
-			>
-				<FileText className="h-5 w-5" />
-				Ver documento
-			</Link>
-		) : (
-			<span className="text-gray-500">Documento no disponible</span>
-		)}
-	</div>
-);
+interface RequestDetailModalProps {
+	request: {
+		id: number;
+		nombreRazonSocial: string;
+		nombreMostrar: string;
+		tipoPersona: string;
+		tipoDocumento: string;
+		numeroDocumento: string;
+		fileCamaraComercio: string;
+		fileCedula: string;
+	};
+	isOpen: boolean;
+	onClose: () => void;
+	refetch: () => void;
+}
 
-const RequestDetailModal = ({ request, isOpen, onClose }) => {
+const RequestDetailModal: React.FC<RequestDetailModalProps> = ({ request, isOpen, onClose, refetch }) => {
 	const [isRejecting, setIsRejecting] = useState(false);
 	const [rejectReason, setRejectReason] = useState("");
 	const [showRejectError, setShowRejectError] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
 	if (!request || !isOpen) return null;
 
@@ -36,6 +35,7 @@ const RequestDetailModal = ({ request, isOpen, onClose }) => {
 			setShowRejectError(true);
 			return;
 		}
+		setIsLoading(true);
 		try {
 			await api.request.reject(request.id, rejectReason);
 			setRejectReason("");
@@ -43,15 +43,22 @@ const RequestDetailModal = ({ request, isOpen, onClose }) => {
 			onClose();
 		} catch (error) {
 			console.error("Error al rechazar la solicitud:", error);
+		} finally {
+			setIsLoading(false);
+			refetch();
 		}
 	};
 
 	const handleApprove = async () => {
+		setIsLoading(true);
 		try {
 			await api.request.approve(request.id);
 			onClose();
 		} catch (error) {
 			console.error("Error al aprobar la solicitud:", error);
+		} finally {
+			setIsLoading(false);
+			refetch();
 		}
 	};
 
@@ -60,9 +67,7 @@ const RequestDetailModal = ({ request, isOpen, onClose }) => {
 			<div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
 				<div className="p-6">
 					<div className="flex justify-between items-center mb-6">
-						<h2 className="text-2xl font-semibold">
-							Detalles de la Solicitud #{request.id}
-						</h2>
+						<h2 className="text-2xl font-semibold">Detalles de la Solicitud #{request.id}</h2>
 						<button onClick={onClose} className="p-2 hover:bg-gray-100 rounded-full">
 							<X className="h-5 w-5" />
 						</button>
@@ -79,33 +84,17 @@ const RequestDetailModal = ({ request, isOpen, onClose }) => {
 						</div>
 						<div>
 							<p className="text-sm text-gray-500">Tipo de Persona</p>
-							<p className="font-medium">
-								{request.tipoPersona == "1" ? "NATURAL" : "JURÍDICA"}
-							</p>
+							<p className="font-medium">{request.tipoPersona == "1" ? "NATURAL" : "JURÍDICA"}</p>
 						</div>
 						<div>
 							<p className="text-sm text-gray-500">Tipo de Documento</p>
-							<p className="font-medium">{request.tipoDocumento}</p>
+							<p className="font-medium">
+								{typeDocs.find((doc) => doc.id === request.tipoDocumento)?.nombre || "Desconocido"}
+							</p>
 						</div>
 						<div>
 							<p className="text-sm text-gray-500">Número de Documento</p>
 							<p className="font-medium">{request.numeroDocumento}</p>
-						</div>
-						<div>
-							<p className="text-sm text-gray-500">Estado</p>
-							<p
-								className={`font-medium ${
-									request.estado === "1"
-										? "text-green-600"
-										: request.estado === "En revisión"
-										? "text-yellow-600"
-										: request.estado === "Inactivo"
-										? "text-red-600"
-										: "text-gray-600"
-								}`}
-							>
-								{request.estado !== "0" ? "Inactivo" : "Activo"}
-							</p>
 						</div>
 					</div>
 
@@ -113,15 +102,9 @@ const RequestDetailModal = ({ request, isOpen, onClose }) => {
 						<h3 className="text-lg font-medium mb-4">Documentos Adjuntos</h3>
 						<div className="grid md:grid-cols-2 gap-4">
 							<DocumentLink title="RUT" pdfPath={request.fileCamaraComercio} />
-							<DocumentLink
-								title="Documento de Identidad"
-								pdfPath={request.fileCedula}
-							/>
+							<DocumentLink title="Documento de Identidad" pdfPath={request.fileCedula} />
 							{request.tipoPersona == "2" && (
-								<DocumentLink
-									title="Cámara de Comercio"
-									pdfPath={request.fileCamaraComercio}
-								/>
+								<DocumentLink title="Cámara de Comercio" pdfPath={request.fileCamaraComercio} />
 							)}
 						</div>
 					</div>
@@ -141,20 +124,20 @@ const RequestDetailModal = ({ request, isOpen, onClose }) => {
 								placeholder="Por favor, explique el motivo del rechazo..."
 							/>
 							{showRejectError && (
-								<p className="text-red-500 text-sm mt-1">
-									Debe proporcionar un motivo para el rechazo
-								</p>
+								<p className="text-red-500 text-sm mt-1">Debe proporcionar un motivo para el rechazo</p>
 							)}
 						</div>
 					)}
 
 					<div className="flex justify-end gap-4 mt-8">
-						{isRejecting ? (
+						{isLoading ? (
+							<div className="flex items-center gap-2">
+								<Loader className="h-5 w-5 animate-spin" />
+								Procesando...
+							</div>
+						) : isRejecting ? (
 							<>
-								<button
-									onClick={() => setIsRejecting(false)}
-									className="px-4 py-2 border rounded-lg hover:bg-gray-50"
-								>
+								<button onClick={() => setIsRejecting(false)} className="px-4 py-2 border rounded-lg hover:bg-gray-50">
 									Cancelar
 								</button>
 								<button
@@ -189,4 +172,24 @@ const RequestDetailModal = ({ request, isOpen, onClose }) => {
 		</div>
 	);
 };
+
+const DocumentLink: React.FC<{ title: string; pdfPath: string }> = ({ title, pdfPath }) => (
+	<div className="border rounded-lg p-4">
+		<h4 className="font-medium mb-2">{title}</h4>
+		{pdfPath ? (
+			<Link
+				href={pdfPath}
+				target="_blank"
+				rel="noopener noreferrer"
+				className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-800 hover:underline"
+			>
+				<FileText className="h-5 w-5" />
+				Ver documento
+			</Link>
+		) : (
+			<span className="text-gray-500">Documento no disponible</span>
+		)}
+	</div>
+);
+
 export default RequestDetailModal;

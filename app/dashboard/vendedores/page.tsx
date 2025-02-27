@@ -4,39 +4,24 @@ import { api } from "@/services/api";
 import { DataTable } from "webtic-ui";
 
 export default function Vendedores() {
-	const { data } = useFetchData(api.user.getAll, "user");
-	const filteredData = data?.data?.filter((item) => item.rol === 2);
+	const { data } = useFetchData(api.user.getSeller, "user");
+	
 
 	const columns = [
-		{ Header: "ID", accessor: "id", key: "id", title: "ID" },
-		{ Header: "Name", accessor: "name", key: "name", title: "Nombre" },
-		{ Header: "Role", accessor: "rol", key: "rol", title: "Rol" },
-		{
-			Header: "Document",
-			accessor: "documento",
-			key: "documento",
-			title: "# Documento",
-		},
-		{
-			Header: "Document Type",
-			accessor: "tipoDocumento",
-			key: "tipoDocumento",
-			title: "Tipo de documento",
-		},
-		{ Header: "Phone", accessor: "telefono", key: "telefono", title: "Teléfono" },
-		{ Header: "Email", accessor: "email", key: "email", title: "Email" },
-		{
-			Header: "Birth Date",
-			accessor: "fechaNacimiento",
-			key: "fechaNacimiento",
-			title: "Fecha de nacimiento",
-		},
-	];
+		{ key: "user", title: "ID Usuario", sortable: true },
+		{ key: "nombreRazonSocial", title: "Razón Social", sortable: true },
+		{ key: "idnegocio", title: "ID Negocio", sortable: true },
+		{ key: "nombreMostrar", title: "Nombre a Mostrar", sortable: true },
+		{ key: "numeroDocumento", title: "Número de Documento", sortable: true },
+		{ key: "nombretipodoc", title: "Tipo de Documento", sortable: true },
+		{ key: "nombretipopers", title: "Tipo de Persona", sortable: true }
+	  ];
+	  
 	return (
 		<div>
 			<h1 className="text-2xl font-bold">Vendedores</h1>
 			<p>Listado de vendedores</p>
-			<DataTable data={filteredData} columns={columns} tableId={""} />
+			<DataTable data={data} columns={columns} tableId={""} />
 		</div>
 	);
 }

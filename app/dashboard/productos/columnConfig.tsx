@@ -68,6 +68,12 @@ export const columns = [
 		title: "Calificación",
 		sortable: true,
 		type: "number",
+		render: (value: number) => (
+			<span className="flex items-center">
+				<span className="ml-1">{value}</span>
+				{/* <span className="text-yellow-400">★</span> */}
+			</span>
+		),
 	},
 	{
 		key: "nombrecategoria",
@@ -81,12 +87,7 @@ export const columns = [
 		sortable: true,
 		type: "text",
 	},
-	{
-		key: "tipoenvio",
-		title: "Tipo de Envío",
-		sortable: true,
-		type: "text",
-	},
+
 	{
 		key: "disponible",
 		title: "Disponible",

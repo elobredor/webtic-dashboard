@@ -21,6 +21,12 @@ export const columns = [
 		type: "text",
 	},
 	{
+		key: "numeroDocumento",
+		title: "Número Documento",
+		sortable: true,
+		type: "text",
+	},
+	{
 		key: "tipoPersona",
 		title: "Tipo Persona",
 		sortable: true,
@@ -58,88 +64,9 @@ export const columns = [
 			</span>
 		),
 	},
-	{
-		key: "numeroDocumento",
-		title: "Número Documento",
-		sortable: true,
-		type: "text",
-	},
-	{
-		key: "estado",
-		title: "Estado",
-		sortable: true,
-		type: "boolean",
-		render: (value: boolean) => (
-			<span
-				className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-					value ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-				}`}
-			>
-				{value ? "Activo" : "Inactivo"}
-			</span>
-		),
-	},
-	{
-		key: "cantPedidos",
-		title: "Pedidos",
-		sortable: true,
-		type: "number",
-	},
-	{
-		key: "rating",
-		title: "Calificación",
-		sortable: true,
-		type: "number",
-		render: (value: number) => (
-			<span className="flex items-center">
-				<span className="text-yellow-400">★</span>
-				<span className="ml-1">{value.toFixed(1)}</span>
-			</span>
-		),
-	},
-	{
-		key: "fileRut",
-		title: "RUT",
-		sortable: false,
-		type: "text",
-		render: (value: string) => (
-			<span
-				className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-					value ? "bg-blue-100 text-blue-800" : "bg-gray-100 text-gray-800"
-				}`}
-			>
-				{value ? "Cargado" : "Pendiente"}
-			</span>
-		),
-	},
-	{
-		key: "fileCedula",
-		title: "Documento ID",
-		sortable: false,
-		type: "text",
-		render: (value: string) => (
-			<span
-				className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-					value ? "bg-blue-100 text-blue-800" : "bg-gray-100 text-gray-800"
-				}`}
-			>
-				{value ? "Cargado" : "Pendiente"}
-			</span>
-		),
-	},
-	{
-		key: "fileCamaraComercio",
-		title: "Cámara Comercio",
-		sortable: false,
-		type: "text",
-		render: (value: string) => (
-			<span
-				className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-					value ? "bg-blue-100 text-blue-800" : "bg-gray-100 text-gray-800"
-				}`}
-			>
-				{value ? "Cargado" : "Pendiente"}
-			</span>
-		),
-	},
+	
+	
+
+	
+	
 ];

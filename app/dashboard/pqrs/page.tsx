@@ -9,7 +9,7 @@ import { columns } from "./columnConfig";
 import { DataTable } from "webtic-ui";
 
 const PqrTable = () => {
-	const { data, loading } = useFetchData(api.pqr.getAll, "pqr"); // ahora envio el string, este hook deberia 1. encontrar la interface PQR, 2. hacer devolver el formato de columnas
+	const { data, loading } = useFetchData(api.pqr.getAllPqrs, "pqr"); // ahora envio el string, este hook deberia 1. encontrar la interface PQR, 2. hacer devolver el formato de columnas
 	const [modalOpen, setModalOpen] = useState(false);
 	const [selectedPQR, setSelectedPQR] = useState<PQR | undefined>();
 

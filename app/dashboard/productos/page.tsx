@@ -6,10 +6,10 @@ import { api } from "@/services/api";
 import { columns } from "./columnConfig";
 import { Product } from "@/Models/Product";
 import DataModal from "@/components/DataModal";
-import { Eye, Edit, Trash } from "lucide-react";
+import { Eye, Edit} from "lucide-react";
 
 const ProductsView = () => {
-	const { data, loading, mutate } = useFetchData(api.product.getAll, "products");
+	const { data, loading } = useFetchData(api.product.getAll, "products");
 	const [modalOpen, setModalOpen] = useState(false);
 	const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 	const [isEditing, setIsEditing] = useState(false);

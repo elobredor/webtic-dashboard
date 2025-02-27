@@ -12,6 +12,7 @@ import {
 	LogOut,
 	Copy,
 	User,
+	Cog,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { usePathname } from "next/navigation";
@@ -28,6 +29,7 @@ const iconMap = {
 	Pedidos: Package,
 	Clientes: User,
 	INCISOS: Copy,
+	Parámetros: Cog,	
 };
 
 const Sidebar = () => {

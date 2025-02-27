@@ -34,8 +34,14 @@ export const userService = {
 		const response = await axiosInstance.post("/user/updatep", data);
 		return response.data;
 	},
-	getAll: async () => {
-		const response = await axiosInstance.get(`/user/get/`);
+	getAll: async (page?: number) => {
+		const url = page ? `/user/get?page=${page}` : `/user/get/`;
+		const response = await axiosInstance.get(url);
 		return response?.data;
 	},
+	getSeller: async (page?: number) => {
+		const url = page ? `/negocio/getvendpag?page=${page}` : `/negocio/getvendpag?`;
+		const response = await axiosInstance.get(url);
+		return response?.data;
+	}
 };

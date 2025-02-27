@@ -1,4 +1,5 @@
 import { OrderService } from "./order.service";
+import { ParamsService } from "./params.service";
 import { PQRService } from "./pqr.service";
 import { productService } from "./products.service";
 import { RequestService } from "./request.service";
@@ -10,6 +11,7 @@ export const api = {
 	order: OrderService,
 	product: productService,
 	request: RequestService,
+	params: ParamsService,
 } as const;
 
 // Type for the entire API
