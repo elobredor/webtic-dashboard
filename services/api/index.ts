@@ -1,3 +1,4 @@
+import { CategoryService } from "./category.service";
 import { OrderService } from "./order.service";
 import { ParamsService } from "./params.service";
 import { PQRService } from "./pqr.service";
@@ -12,6 +13,7 @@ export const api = {
 	product: productService,
 	request: RequestService,
 	params: ParamsService,
+	category: CategoryService,
 } as const;
 
 // Type for the entire API

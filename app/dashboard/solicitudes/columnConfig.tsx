@@ -41,7 +41,7 @@ export const columns = [
 					value === 1 ? "bg-blue-100 text-blue-800" : "bg-purple-100 text-purple-800"
 				}`}
 			>
-				{value === 1 ? "Natural" : "Jurídica"}
+				{value !== 1 ? "Natural" : "Jurídica"}
 			</span>
 		),
 	},

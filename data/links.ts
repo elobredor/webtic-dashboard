@@ -11,6 +11,7 @@ export const links: LinkItem[] = [
 	{ href: "/dashboard/productos", label: "Productos" },
 	{ href: "/dashboard/pqrs", label: "PQRS" },
 	{ href: "/dashboard/parametros", label: "Parámetros" },
+	{ href: "/dashboard/categoria", label: "Categorías" },
 	{
 		href: "/dashboard/clientes",
 		label: "Usuarios",

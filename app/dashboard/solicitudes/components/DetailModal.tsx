@@ -84,7 +84,7 @@ const RequestDetailModal: React.FC<RequestDetailModalProps> = ({ request, isOpen
 						</div>
 						<div>
 							<p className="text-sm text-gray-500">Tipo de Persona</p>
-							<p className="font-medium">{request.tipoPersona == "1" ? "NATURAL" : "JURÍDICA"}</p>
+							<p className="font-medium">{request.tipoPersona !== "1" ? "NATURAL" : "JURÍDICA"}</p>
 						</div>
 						<div>
 							<p className="text-sm text-gray-500">Tipo de Documento</p>

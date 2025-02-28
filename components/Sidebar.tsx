@@ -13,6 +13,7 @@ import {
 	Copy,
 	User,
 	Cog,
+	Tags,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { usePathname } from "next/navigation";
@@ -30,6 +31,7 @@ const iconMap = {
 	Clientes: User,
 	INCISOS: Copy,
 	Parámetros: Cog,	
+	Categorías: Tags,
 };
 
 const Sidebar = () => {
