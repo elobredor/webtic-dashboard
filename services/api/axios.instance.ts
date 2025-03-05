@@ -1,6 +1,5 @@
 import axios from "axios";
 import { API_CONFIG } from "@/config/api.config";
-// import { useAuthStore } from "../../stores/auth.store";
 import { storage } from "@/utils/storage";
 
 const axiosInstance = axios.create(API_CONFIG);
@@ -25,10 +24,10 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
 	(response) => response,
 	async (error) => {
-		if (error.response?.status === 401) {
-			// Handle unauthorized access
-			// useAuthStore.getState().logout();
-			// window.location.href = '/login'; esto es lo que enruta hacia login cuando el token es inválido
+		if (error.response?.status === 406 || error.response?.status === 401) {
+			storage.clearAuth();
+			alert("Sesión expirada");
+			window.location.href = "/auth/login";
 		}
 		return Promise.reject(error);
 	}

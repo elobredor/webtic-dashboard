@@ -30,7 +30,7 @@ const iconMap = {
 	Pedidos: Package,
 	Clientes: User,
 	INCISOS: Copy,
-	Parámetros: Cog,	
+	Parámetros: Cog,
 	Categorías: Tags,
 };
 

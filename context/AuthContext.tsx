@@ -5,7 +5,7 @@ import { AuthContextType, AuthState } from "../Models/auth";
 import { User } from "../Models/User";
 import { storage } from "@/utils/storage";
 import { createContext, useContext, useEffect, useState } from "react";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const initialState: AuthState = {
@@ -33,6 +33,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 			isLoading: false,
 			error: null,
 		});
+		setIsChecking(false);
 	};
 
 	const setUnauthenticated = () => {
@@ -42,29 +43,35 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 			isLoading: false,
 			error: null,
 		});
+		setIsChecking(false);
 	};
 
 	const setError = (error: string) => {
 		updateState({ error, isLoading: false });
 	};
+
 	useEffect(() => {
 		const initializeAuth = async () => {
+			console.log("🔄 Inicializando autenticación...");
 			const storedUser = storage.getUser();
 			const token = storage.getToken();
-			console.log("storedUser", storedUser);
+			console.log("📌 Usuario almacenado:", storedUser);
 
 			if (storedUser !== null && token) {
 				try {
 					setAuthenticated(storedUser);
+					console.log("✅ Usuario autenticado:", storedUser);
 				} catch (error: any) {
+					console.error("❌ Error en autenticación:", error);
 					storage.clearAuth();
 					setUnauthenticated();
-				} finally {
-					setIsChecking(false);
 				}
 			} else {
+				console.log("🚫 No hay usuario autenticado.");
 				setUnauthenticated();
 			}
+
+			setIsChecking(false); // ✅ Esto asegura que el estado se actualiza
 		};
 
 		initializeAuth();
@@ -85,26 +92,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
 			storage.setAuth(userAct, accessToken, negocio);
 			setAuthenticated(userAct);
-			router.push("/dashboard");
-			
-
-		
+			router.replace("/dashboard"); // Cambio a replace()
 		} catch (error: any) {
-			if (error.message === "Este usuario no es administrador") {
-				setError(error.message);
-			} else {
-				setError("Credenciales incorrectas");
-			}
+			setError(
+				error.message === "Este usuario no es administrador"
+					? error.message
+					: "Credenciales incorrectas"
+			);
 			throw error;
 		}
 	};
 
 	const logout = async () => {
-		const confirmLogout = window.confirm("Seguro deseas cerrar sesión?");
-		if (!confirmLogout) return;
-		setUnauthenticated(); // esto deberia hacer que se enrute a login usando el context router
+		console.log("🔴 Cerrando sesión...");
 		storage.clearAuth();
-		redirect("/auth/login");
+		setUnauthenticated();
 	};
 
 	const clearError = () => {
@@ -115,16 +117,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 		storage.setAuth(user, token, negocio);
 		setAuthenticated(user);
 	};
+
 	const updateUser = (key: string, value: any) => {
-		// Actualiza solo una propiedad en el localStorage
 		storage.updateUserProperty(key, value);
-
-		// Si el valor es un array, asegúrate de manejarlo correctamente
 		const updatedValue = Array.isArray(value) ? [...value] : value;
-
-		// Actualiza el usuario en el estado global
 		const updatedUser: User = { ...state.user, [key]: updatedValue } as User;
-		// Actualiza el estado global
 		setAuthenticated(updatedUser);
 	};
 
@@ -147,10 +144,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
 export const useAuth = () => {
 	const context = useContext(AuthContext);
-
-	if (context === undefined) {
+	if (!context) {
 		throw new Error("useAuth must be used within an AuthProvider");
 	}
-
 	return context;
 };

@@ -15,31 +15,32 @@ export const RoutesProvider: React.FC<{ children: React.ReactNode }> = ({
 	children,
 }) => {
 	const { user, isChecking } = useAuth();
-
 	const router = useRouter();
 	const pathname = usePathname();
 
-
 	const checkAccess = () => {
 		if (isChecking) {
-			// Show loader while checking authentication status
-			<h4>Cargando..</h4>;
+			console.log("⏳ Esperando a que termine la verificación...");
 			return;
 		}
-
 		if (user) {
-			// If user is authenticated, navigate to the dashboard
-			if (pathname === `/auth/login` || pathname === `/auth/register`) {
-				router.push(`/dashboard`);
+			// Si el usuario está autenticado y está en login o register, lo redirigimos al dashboard
+			if (pathname === "/auth/login" || pathname === "/auth/register") {
+				console.log("➡️ Usuario autenticado, redirigiendo al /dashboard");
+				router.push("/dashboard");
 			}
 		} else {
-			router.push(`/auth/login`);
+			// Si no hay usuario, bloqueamos el acceso a rutas protegidas
+			if (pathname === "/dashboard" || pathname === "/") {
+				console.log("🚫 Acceso denegado, redirigiendo a /auth/login");
+				router.push("/auth/login");
+			}
 		}
 	};
 
 	useEffect(() => {
 		checkAccess();
-	}, [pathname, user, checkAccess]);
+	}, [pathname, user, isChecking]);
 
 	const redirectPath = (path: string) => {
 		router.push(path);
