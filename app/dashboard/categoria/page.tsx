@@ -77,21 +77,21 @@ export default function Categorias() {
         <div className="flex space-x-2">
           <button
             onClick={() => handleView(row)}
-            className="p-1.5 bg-blue-500 text-white rounded hover:bg-blue-600 transition"
+          className="px-4 py-2 border-2 border-blue-400 text-blue-400 rounded-md hover:bg-blue-400 hover:text-white transition"
             title="Ver detalles"
           >
             <Eye className="w-4 h-4" />
           </button>
           <button
-            onClick={() => handleEdit(row)}
-            className="p-1.5 bg-green-500 text-white rounded hover:bg-green-600 transition"
+            onClick={() => handleView(row)}
+           		className="px-4 py-2 border-2 border-green-400 text-green-400 rounded-md hover:bg-green-400 hover:text-white transition"
             title="Editar categoría"
           >
             <Edit className="w-4 h-4" />
           </button>
           <button
             onClick={() => handleDelete(row)}
-            className="p-1.5 bg-red-500 text-white rounded hover:bg-red-600 transition"
+          className="px-4 py-2 border-2 border-red-500 text-red-500 rounded-md hover:bg-red-500 hover:text-white transition"
             title="Eliminar categoría"
           >
             <Trash className="w-4 h-4" />
