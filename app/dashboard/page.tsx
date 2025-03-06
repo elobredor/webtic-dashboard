@@ -1,32 +1,18 @@
 "use client";
-
-import { useRouter } from "next/navigation";
-
 import { useEffect, useState } from "react";
-
-import { Users, ShoppingCart, DollarSign, Store } from "lucide-react";
+import { Users,DollarSign, Store } from "lucide-react";
 
 const Dashboard = () => {
 	const [activeUsers, setActiveUsers] = useState(0);
 	const [pendingOrders, setPendingOrders] = useState(0);
 	const [monthlyIncome, setMonthlyIncome] = useState(0);
 	const [loading, setLoading] = useState(false);
-	// const { state } = useAuthState();
-	const router = useRouter();
 
-	// if (!state.isAuthenticated) {
-	// 	router.push("/auth/login");
-	// 	return null;
-	// }
 
 	useEffect(() => {
 		const loadDashboardData = async () => {
 			try {
 				setLoading(true);
-
-				setActiveUsers(2);
-				setPendingOrders(55);
-				setMonthlyIncome(12450);
 			} catch (error) {
 				console.error("Error cargando datos del dashboard:", error);
 			} finally {

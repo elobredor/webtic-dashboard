@@ -7,7 +7,7 @@ export default function DashboardLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<div className="h-screen w-screen">
+		<div className="vw-screen h-screen">
 			<div className="flex flex-col h-full">
 				{/* Header */}
 				<Header />
@@ -15,7 +15,7 @@ export default function DashboardLayout({
 					{/* Sidebar */}
 					<Sidebar />
 					{/* Main Content */}
-					<div className="flex-1 p-4 overflow-y-auto bg-gray-100">{children}</div>
+					<div className="flex-1 p-6 overflow-y-auto  bg-gray-100">{children}</div>
 				</div>
 			</div>
 		</div>
