@@ -1,3 +1,5 @@
+import { typeDocs } from "@/data/typeDocuments";
+
 type TipoPersona = 1 | 2; // 1: Natural, 2: Jurídica
 type TipoDocumento = 1 | 2; // 1: CC, 2: NIT
 
@@ -41,7 +43,7 @@ export const columns = [
 					value === 1 ? "bg-blue-100 text-blue-800" : "bg-purple-100 text-purple-800"
 				}`}
 			>
-				{value !== 1 ? "Natural" : "Jurídica"}
+				{value == 1 ? "Jurídica" : "Natural"}
 			</span>
 		),
 	},
@@ -51,8 +53,7 @@ export const columns = [
 		sortable: true,
 		type: "select",
 		options: [
-			{ label: "CC", value: 1 },
-			{ label: "NIT", value: 2 },
+			typeDocs
 		],
 		render: (value: TipoDocumento) => (
 			<span
@@ -60,7 +61,7 @@ export const columns = [
 					value === 1 ? "bg-gray-100 text-gray-800" : "bg-yellow-100 text-yellow-800"
 				}`}
 			>
-				{value === 1 ? "CC" : "NIT"}
+				{typeDocs.find((doc) => doc.id === value)?.nombre || "Desconocido"}
 			</span>
 		),
 	},

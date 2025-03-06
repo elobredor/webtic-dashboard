@@ -16,6 +16,7 @@ interface RequestDetailModalProps {
 		numeroDocumento: string;
 		fileCamaraComercio: string;
 		fileCedula: string;
+		fileRut: string; 
 	};
 	isOpen: boolean;
 	onClose: () => void;
@@ -29,6 +30,7 @@ const RequestDetailModal: React.FC<RequestDetailModalProps> = ({ request, isOpen
 	const [isLoading, setIsLoading] = useState(false);
 
 	if (!request || !isOpen) return null;
+console.log(request, 'eto e la  solicitud');
 
 	const handleReject = async () => {
 		if (!rejectReason.trim()) {
@@ -84,7 +86,7 @@ const RequestDetailModal: React.FC<RequestDetailModalProps> = ({ request, isOpen
 						</div>
 						<div>
 							<p className="text-sm text-gray-500">Tipo de Persona</p>
-							<p className="font-medium">{request.tipoPersona !== "1" ? "NATURAL" : "JURÍDICA"}</p>
+							<p className="font-medium">{request.tipoPersona !== "2" ? "NATURAL" : "JURÍDICA"}</p>
 						</div>
 						<div>
 							<p className="text-sm text-gray-500">Tipo de Documento</p>
@@ -101,9 +103,9 @@ const RequestDetailModal: React.FC<RequestDetailModalProps> = ({ request, isOpen
 					<div className="mt-8">
 						<h3 className="text-lg font-medium mb-4">Documentos Adjuntos</h3>
 						<div className="grid md:grid-cols-2 gap-4">
-							<DocumentLink title="RUT" pdfPath={request.fileCamaraComercio} />
+							<DocumentLink title="RUT" pdfPath={request.fileRut} />
 							<DocumentLink title="Documento de Identidad" pdfPath={request.fileCedula} />
-							{request.tipoPersona == "2" && (
+							{request.tipoPersona == "1" && (
 								<DocumentLink title="Cámara de Comercio" pdfPath={request.fileCamaraComercio} />
 							)}
 						</div>
