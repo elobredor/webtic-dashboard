@@ -5,6 +5,12 @@ import { DataTable } from "webtic-ui";
 
 export default function Vendedores() {
 	const { data } = useFetchData(api.user.getSeller, "user");
+
+	const  onChange = ()=>{
+		console.log("/negocio/getvendpag?page=${page}");
+		
+	}
+	
 	
 
 	const columns = [
@@ -21,7 +27,7 @@ export default function Vendedores() {
 		<div>
 			<h1 className="text-2xl font-bold">Vendedores</h1>
 			<p>Listado de vendedores</p>
-			<DataTable data={data} columns={columns} tableId={""} />
+			<DataTable data={data?.data?.data} columns={columns} tableId={"seller-table"} onPageSizeChange={onChange} totalRecords={data?.data?.total}  />
 		</div>
 	);
 }
