@@ -116,6 +116,7 @@ export const columns = [
 		title: "Vendedor",
 		sortable: true,
 		type: "text",
+		editable: false, 
 		render: (value: string | undefined) => (
 			<span>{value || "Sin información"}</span>
 		),

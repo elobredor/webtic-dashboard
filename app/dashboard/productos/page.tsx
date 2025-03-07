@@ -9,7 +9,7 @@ import DataModal from "@/components/DataModal";
 import { Eye, Edit} from "lucide-react";
 
 const ProductsView = () => {
-	const { data, loading } = useFetchData(api.product.getAll, "products");
+	const { data, loading, refetch } = useFetchData(api.product.getAll, "products");
 	const [modalOpen, setModalOpen] = useState(false);
 	const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 	const [isEditing, setIsEditing] = useState(false);
@@ -28,9 +28,10 @@ const ProductsView = () => {
 
 	const handleSave = async (updatedProduct: Product) => {
 		try {
-			//   await api.product.update(updatedProduct.id, updatedProduct);
+			  await api.product.update(updatedProduct)
 
 			setModalOpen(false);
+			refetch()
 		} catch (error) {
 			console.error("Error updating product:", error);
 		}

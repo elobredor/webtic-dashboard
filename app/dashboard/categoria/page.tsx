@@ -1,100 +1,79 @@
 "use client";
-
-import { useState } from "react";
+import React, { useState } from "react";
+import { DataTable } from "webtic-ui";
 import useFetchData from "@/hooks/useFetchData";
 import { api } from "@/services/api";
-import { DataTable } from "webtic-ui";
-import { Edit, Eye, Trash } from "lucide-react";
-import ViewCategoryModal from "./modals/ViewCategoryModal";
-import EditCategoryModal from "./modals/EditCategoryModal";
-import DeleteCategoryModal from "./modals/DeleteCategoryModal";
 
-export default function Categorias() {
-  const { data, refetch } = useFetchData(api.category.getAll, "category");
-  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(null);
+import { Category } from "@/Models/Category";
+import DataModal from "@/components/DataModal";
+import { Eye, Edit, Trash } from "lucide-react";
+import { columns } from "./columnConfig";
 
-  const handleView = (category) => {
+const Categorias = () => {
+  const { data, loading, refetch } = useFetchData(api.category.getAll, "category");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+
+  const handleView = (category: Category) => {
     setSelectedCategory(category);
-    setIsViewModalOpen(true);
+    setIsEditing(false);
+    setModalOpen(true);
   };
 
-  const handleEdit = (category) => {
+  const handleEdit = (category: Category) => {
     setSelectedCategory(category);
-    setIsEditModalOpen(true);
+    setIsEditing(true);
+    setModalOpen(true);
   };
 
-  const handleDelete = (category) => {
-    setSelectedCategory(category);
-    setIsDeleteModalOpen(true);
+  const handleDelete = async (category: Category) => {
+    try {
+      await api.category.delete(category.id);
+      refetch();
+    } catch (error) {
+      console.error("Error deleting category:", error);
+    }
   };
 
-  const handleCreate = () => {
-    setSelectedCategory(null);
-    setIsCreateModalOpen(true);
+  const handleSave = async (updatedCategory: Category) => {
+    try {
+      await api.category.update(updatedCategory);
+      setModalOpen(false);
+      refetch();
+    } catch (error) {
+      console.error("Error updating category:", error);
+    }
   };
 
-  const handleSuccessfulOperation = () => {
-    refetch();
-  };
-
-  const columns = [
-    { Header: "ID", accessor: "id", key: "id", title: "ID" },
-    { Header: "Title", accessor: "title", key: "title", title: "Título" },
+  const columnsWithActions = [
+    ...columns,
     {
-      Header: "Image",
-      accessor: "image",
-      key: "image",
-      title: "Imagen",
-      // Se puede mejorar implementando un componente de imagen
-      render: (image) => image ? (
-        <div className="w-12 h-12 bg-gray-100 rounded overflow-hidden">
-          <img src={image} alt="category" className="w-full h-full object-cover" />
-        </div>
-      ) : (
-        <span className="text-gray-400">Sin imagen</span>
-      ),
-    },
-    {
-      Header: "Status",
-      accessor: "status",
-      key: "status",
-      title: "Estado",
-      render: (status) => (
-        <span className={`px-2 py-1 rounded text-xs font-medium ${status ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>
-          {status ? "Activo" : "Inactivo"}
-        </span>
-      ),
-    },
-    {
-      Header: "Actions",
       key: "actions",
       title: "Acciones",
-      render: (_, row) => (
-        <div className="flex space-x-2">
+      sortable: false,
+      render: (_: any, row: Category) => (
+        <div className="flex gap-2">
           <button
             onClick={() => handleView(row)}
-          className="px-4 py-2 border-2 border-blue-400 text-blue-400 rounded-md hover:bg-blue-400 hover:text-white transition"
+            className="px-4 py-2 border-2 border-green-400 text-green-400 rounded-md hover:bg-green-400 hover:text-white transition"
             title="Ver detalles"
           >
-            <Eye className="w-4 h-4" />
+            <Eye className="h-4 w-4" />
           </button>
           <button
-            onClick={() => handleView(row)}
-           		className="px-4 py-2 border-2 border-green-400 text-green-400 rounded-md hover:bg-green-400 hover:text-white transition"
-            title="Editar categoría"
+            onClick={() => handleEdit(row)}
+            className="px-4 py-2 border-2 border-blue-400 text-blue-400 rounded-md hover:bg-blue-400 hover:text-white transition"
+            title="Editar"
           >
-            <Edit className="w-4 h-4" />
+            <Edit className="h-4 w-4" />
           </button>
           <button
             onClick={() => handleDelete(row)}
-          className="px-4 py-2 border-2 border-red-500 text-red-500 rounded-md hover:bg-red-500 hover:text-white transition"
-            title="Eliminar categoría"
+            className="px-4 py-2 border-2 border-red-500 text-red-500 rounded-md hover:bg-red-500 hover:text-white transition"
+            title="Eliminar"
           >
-            <Trash className="w-4 h-4" />
+            <Trash className="h-4 w-4" />
           </button>
         </div>
       ),
@@ -102,47 +81,30 @@ export default function Categorias() {
   ];
 
   return (
-    <div className="space-y-4">
-      <div>
-        <h1 className="text-2xl font-bold mb-2">Categorías</h1>
-        <p className="text-gray-600 mb-4">Gestión de categorías para la aplicación</p>
-      </div>
+    <div>
+      <h1 className="text-2xl font-bold">Categorías</h1>
+      <p>Listado de Categorías</p>
 
-      <DataTable 
-        data={data?.data || []} 
-        columns={columns} 
-        tableId="categorias" 
-        onAdd={handleCreate}
-     
-        loading={!data}
+      <DataTable
+        columns={columnsWithActions}
+        data={data?.data || []}
+        tableId="categories-table"
+        loading={loading}
       />
-      
-      {/* Modal para ver categoría */}
-      <ViewCategoryModal
-        isOpen={isViewModalOpen}
-        onClose={() => setIsViewModalOpen(false)}
-        category={selectedCategory}
-      />
-      
-      {/* Modal para editar categoría */}
-      <EditCategoryModal
-        isOpen={isEditModalOpen || isCreateModalOpen}
-        onClose={() => {
-          setIsEditModalOpen(false);
-          setIsCreateModalOpen(false);
-        }}
-        category={selectedCategory}
-        isCreating={isCreateModalOpen}
-        onSuccess={handleSuccessfulOperation}
-      />
-      
-      {/* Modal para eliminar categoría */}
-      <DeleteCategoryModal
-        isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
-        category={selectedCategory}
-        onSuccess={handleSuccessfulOperation}
-      />
+
+      {selectedCategory && (
+        <DataModal
+          isOpen={modalOpen}
+          onClose={() => setModalOpen(false)}
+          data={selectedCategory}
+          columns={columns}
+          title={isEditing ? "Editar Categoría" : "Detalles de la Categoría"}
+          isEditing={isEditing}
+          onSave={handleSave}
+        />
+      )}
     </div>
   );
-}
+};
+
+export default Categorias;

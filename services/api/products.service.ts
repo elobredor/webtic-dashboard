@@ -55,7 +55,7 @@ export const productService = {
 
 		return insertProduct?.data;
 	},
-	updateProduct: async (producto: Product) => {
+	update: async (producto: Product) => {
 		const insertProduct = await axiosInstance.post("/producto/update", producto);
 
 		return insertProduct?.data?.data;
@@ -97,4 +97,5 @@ export const productService = {
 			return response?.data?.data;
 		} catch (error) {}
 	},
+	
 };
