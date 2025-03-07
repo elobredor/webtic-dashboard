@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { X } from "lucide-react";
+import Image from "next/image";
 
 interface Column {
 	key: string;
@@ -80,6 +81,61 @@ const DataModal = ({
 			return column.render ? column.render(value, formData) : value;
 		}
 
+		// Handle image type specially
+		if (column.type === "Imagen") {
+			// In edit mode
+			if (isEditing) {
+				return (
+					<div className="space-y-3">
+						{/* Always show image preview when there's a URL */}
+						{value && (
+							<div className="relative w-32 h-32">
+								<Image
+									src={value}
+									alt={`${column.title}`}
+									fill
+									className="object-cover rounded-md"
+									sizes="128px"
+								/>
+								<button
+									type="button"
+									onClick={() => handleChange(column.key, "")}
+									className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center z-10"
+								>
+									<X className="w-4 h-4" />
+								</button>
+							</div>
+						)}
+						
+						<input
+							type="text"
+							value={value ?? ""}
+							onChange={(e) => handleChange(column.key, e.target.value)}
+							className="w-full p-2 border rounded-md"
+							placeholder="URL de la imagen"
+						/>
+					</div>
+				);
+			}
+			
+			// In view mode, show the image instead of URL text
+			if (value) {
+				return (
+					<div className="relative w-32 h-32">
+						<Image
+							src={value}
+							alt={`${column.title}`}
+							fill
+							className="object-cover rounded-md"
+							sizes="128px"
+						/>
+					</div>
+				);
+			}
+			
+			return "Sin imagen";
+		}
+
 		// Edit mode inputs based on type
 		if (isEditing) {
 			switch (column.type) {
@@ -129,26 +185,6 @@ const DataModal = ({
 								</option>
 							))}
 						</select>
-					);
-
-				case "image":
-					return (
-						<div className="space-y-2">
-							{/* {value && (
-								<img
-									src={value}
-									alt="Preview"
-									className="w-20 h-20 object-cover rounded-md"
-								/>
-							)} */}
-							<input
-								type="text"
-								value={value ?? ""}
-								onChange={(e) => handleChange(column.key, e.target.value)}
-								className="w-full p-2 border rounded-md"
-								placeholder="URL de la imagen"
-							/>
-						</div>
 					);
 
 				default:
