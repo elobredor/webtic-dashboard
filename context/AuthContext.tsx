@@ -61,6 +61,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 				try {
 					setAuthenticated(storedUser);
 					console.log("✅ Usuario autenticado:", storedUser);
+					// equi validar la vigencia del token
+					router.push("/dashboard");
 				} catch (error: any) {
 					console.error("❌ Error en autenticación:", error);
 					storage.clearAuth();
