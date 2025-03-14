@@ -1,42 +1,42 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import {
-
-	DataTableBody,
-	DataTableHeader,
-	DataTableFooter,
+  DataTableBody,
+  DataTableHeader,
+  DataTableFooter,
 } from "./components";
 import { Column } from "@/data/Column";
 
 interface DataTableProps {
   columns: Column[];
-  data: any[];
-  loading?: boolean;
-  pageSize: number;
-  currentPage: number;
-  totalRecords: number;
-  onPageChange: (page: number) => void;
-  onPageSizeChange: (size: number) => void;
-  onRefresh?: () => void;
-  renderActions?: (item: any) => React.ReactNode;
   tableId: string;
+  fetchFunction: (page: number, pageSize: number, searchTerm: string) => Promise<{
+    data: any[];
+    total: number;
+  }>;
   onAdd?: () => void;
+  renderActions?: (item: any) => React.ReactNode;
+  initialPageSize?: number;
 }
 
 const DataTable: React.FC<DataTableProps> = ({
   columns,
-  data,
-  loading = false,
-  pageSize,
-  currentPage,
-  totalRecords,
-  onPageChange,
-  onPageSizeChange,
-  renderActions,
   tableId,
-  onAdd, 
-
+  fetchFunction,
+  onAdd,
+  renderActions,
+  initialPageSize = 10,
 }) => {
+  // Estado para manejar datos y paginación
+  const [data, setData] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [pageSize, setPageSize] = useState(initialPageSize);
+  const [totalRecords, setTotalRecords] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
+  const searchTimeout = useRef<NodeJS.Timeout | null>(null);
+
+  // Estado para manejo de columnas visibles
   const [visibleColumns, setVisibleColumns] = useState<Set<string>>(() => {
     if (typeof window !== "undefined") {
       const savedColumns = localStorage.getItem(`${tableId}-visible-columns`);
@@ -50,6 +50,26 @@ const DataTable: React.FC<DataTableProps> = ({
   const [showColumnSelector, setShowColumnSelector] = useState(false);
   const columnSelectorRef = useRef<HTMLDivElement>(null);
 
+  // Cargar datos usando la función proporcionada
+  const fetchData = async (page = currentPage, size = pageSize, search = searchTerm) => {
+    setLoading(true);
+    try {
+      const result = await fetchFunction(page, size, search);
+      setData(result.data || []);
+      setTotalRecords(result.total || 0);
+    } catch (error) {
+      console.error(`Error fetching data for table ${tableId}:`, error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Efecto para cargar datos al iniciar o cambiar parámetros
+  useEffect(() => {
+    fetchData();
+  }, [currentPage, pageSize]);
+
+  // Guardar columnas visibles en localStorage
   useEffect(() => {
     if (typeof window !== "undefined") {
       localStorage.setItem(
@@ -59,6 +79,7 @@ const DataTable: React.FC<DataTableProps> = ({
     }
   }, [visibleColumns, tableId]);
 
+  // Cerrar selector de columnas al hacer clic fuera
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -75,12 +96,42 @@ const DataTable: React.FC<DataTableProps> = ({
     };
   }, []);
 
+  // Handlers para acciones de la tabla
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handlePageSizeChange = (size: number) => {
+    setPageSize(size);
+    setCurrentPage(1);
+  };
+
+  const handleRefresh = () => {
+    fetchData(currentPage, pageSize, searchTerm);
+  };
+
+  const handleSearch = (term: string) => {
+    setSearchTerm(term);
+    
+    if (searchTimeout.current) {
+      clearTimeout(searchTimeout.current);
+    }
+    
+    searchTimeout.current = setTimeout(() => {
+      setCurrentPage(1); // Volver a la primera página al buscar
+      fetchData(1, pageSize, term);
+    }, 500);
+  };
+
+  // Calcular valores para la paginación
   const totalPages = Math.ceil(totalRecords / pageSize);
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = Math.min(startIndex + pageSize, totalRecords);
 
+  // Filtrar columnas visibles
   const visibleColumnsList = columns.filter((col) => visibleColumns.has(col.key));
 
+  // Función para cambiar visibilidad de columnas
   const toggleColumnVisibility = (key: string) => {
     setVisibleColumns((prev) => {
       const next = new Set(prev);
@@ -105,6 +156,9 @@ const DataTable: React.FC<DataTableProps> = ({
         visibleColumns={visibleColumns}
         toggleColumnVisibility={toggleColumnVisibility}
         onAdd={onAdd}
+        onRefresh={handleRefresh}
+        searchTerm={searchTerm}
+        onSearch={handleSearch}
       />
 
       <div className="overflow-x-auto">
@@ -119,6 +173,11 @@ const DataTable: React.FC<DataTableProps> = ({
                   {column.title}
                 </th>
               ))}
+              {renderActions && (
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">
+                  Acciones
+                </th>
+              )}
             </tr>
           </thead>
 
@@ -136,14 +195,12 @@ const DataTable: React.FC<DataTableProps> = ({
         pageSize={pageSize}
         currentPage={currentPage}
         totalPages={totalPages}
-        totalRecords={data?.length}
+        totalRecords={totalRecords}
         startIndex={startIndex}
         endIndex={endIndex}
-        onPageSizeChange={onPageSizeChange}
-        onPageChange={onPageChange}
+        onPageSizeChange={handlePageSizeChange}
+        onPageChange={handlePageChange}
       />
-
-   
     </div>
   );
 };

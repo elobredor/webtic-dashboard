@@ -1,45 +1,26 @@
 "use client";
-import { useState, useEffect } from "react";
-
 import { api } from "@/services/api";
 import DataTable from "@/components/DataTable";
 
-
 export default function Vendedores() {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [totalRecords, setTotalRecords] = useState(0);
-
-  const fetchVendedores = async (page = 1, size = pageSize, searchTerm = "") => {
-    setLoading(true);
+  // Función que pasaremos al DataTable para obtener datos
+  const fetchVendedores = async (page, pageSize, searchTerm) => {
     try {
-      const response = await api.user.getSeller(page, size, searchTerm);
-      setData(response?.data?.data || []);
-      setTotalRecords(response?.data?.total || 0);
+      const response = await api.user.getSeller(page, pageSize, searchTerm);
+      return {
+        data: response?.data?.data || [],
+        total: response?.data?.total || 0
+      };
     } catch (error) {
       console.error("Error al cargar vendedores:", error);
-    } finally {
-      setLoading(false);
+      return { data: [], total: 0 };
     }
   };
 
-  useEffect(() => {
-    fetchVendedores(currentPage, pageSize);
-  }, [currentPage, pageSize]);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
-
-  const handlePageSizeChange = (size: number) => {
-    setPageSize(size);
-    setCurrentPage(1); // Reiniciar a la primera página
-  };
-
-  const handleRefresh = () => {
-    fetchVendedores(1, pageSize);
+  // Acciones personalizadas para cada fila
+  const renderActions = (item) => {
+    // Puedes añadir botones de acción personalizados si los necesitas
+    return null;
   };
 
   const columns = [
@@ -64,7 +45,7 @@ export default function Vendedores() {
               .updateSellerStatus({ id: item.user, estado: newEstado })
               .then(() => {
                 console.log(`Estado actualizado a ${newEstado}`);
-                handleRefresh();
+                // La tabla se refrescará automáticamente al llamar a la API
               })
               .catch((error) => {
                 console.error("Error al actualizar estado:", error);
@@ -82,21 +63,13 @@ export default function Vendedores() {
   return (
     <div>
       <h1 className="text-2xl font-bold">Vendedores</h1>
-      <p>Listado de vendedores </p>
-
+      <p>Listado de vendedores</p>
       <DataTable
-        data={data}
         columns={columns}
-        tableId="seller-table"
-        loading={loading}
-        currentPage={currentPage}
-        pageSize={pageSize}
-        totalRecords={totalRecords}
-        onPageChange={handlePageChange}
-        onPageSizeChange={handlePageSizeChange}
-        onFetchData={fetchVendedores}
-  
-        
+        tableId="sellers-table"
+        fetchFunction={fetchVendedores}
+        renderActions={renderActions}
+        initialPageSize={10}
       />
     </div>
   );
