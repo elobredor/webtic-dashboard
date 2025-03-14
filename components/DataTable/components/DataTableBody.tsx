@@ -3,9 +3,9 @@ import { Column } from "@/data/Column";
 
 interface DataTableBodyProps {
   visibleColumnsList: Column[];
-  paginatedData: any[];
+  paginatedData: Record<string, any>[];
   tableId: string;
-  renderActions?: (item: any) => React.ReactNode;
+  renderActions?: (item: Record<string, any>) => React.ReactNode;
   onView: ()=> void;
 }
 
@@ -23,7 +23,7 @@ const DataTableBody: FC<DataTableBodyProps> = ({
         	<td
 						colSpan={
 							visibleColumnsList.length +
-							(onView || renderActions ? 1 : 0)
+              (renderActions ? 1 : 0)
 						}
 						className="px-6 py-4 text-center text-sm text-gray-500 dark:text-gray-400"
 					>

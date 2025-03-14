@@ -20,6 +20,7 @@ interface DataTableProps {
   onRefresh?: () => void;
   renderActions?: (item: any) => React.ReactNode;
   tableId: string;
+  onAdd?: () => void;
 }
 
 const DataTable: React.FC<DataTableProps> = ({
@@ -33,6 +34,8 @@ const DataTable: React.FC<DataTableProps> = ({
   onPageSizeChange,
   renderActions,
   tableId,
+  onAdd, 
+
 }) => {
   const [visibleColumns, setVisibleColumns] = useState<Set<string>>(() => {
     if (typeof window !== "undefined") {
@@ -101,6 +104,7 @@ const DataTable: React.FC<DataTableProps> = ({
         columns={columns}
         visibleColumns={visibleColumns}
         toggleColumnVisibility={toggleColumnVisibility}
+        onAdd={onAdd}
       />
 
       <div className="overflow-x-auto">
@@ -132,7 +136,7 @@ const DataTable: React.FC<DataTableProps> = ({
         pageSize={pageSize}
         currentPage={currentPage}
         totalPages={totalPages}
-        totalRecords={totalRecords}
+        totalRecords={data?.length}
         startIndex={startIndex}
         endIndex={endIndex}
         onPageSizeChange={onPageSizeChange}

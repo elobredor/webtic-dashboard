@@ -6,20 +6,36 @@ export const CategoryService = {
 	
 		return data;
 	},
-//aqui es multipart el asunto 
-	create: async (data: any) =>{
-		const response = await axiosInstance.post(`categoria/create/`, data, {
+
+	create: async (data: FormData, images?: File[]) => {
+		const formData = data;
+
+		images?.forEach((image) => {
+			formData.append("images", image); // Append each file to the FormData
+		});
+		const insertProduct = await axiosInstance.post("categoria/create/", formData, {
 			headers: {
 				"Content-Type": "multipart/form-data",
 			},
 		});
-		return response.data
+
+		return insertProduct?.data;
 	},
 	//aquui tambien es multipart 
-	update: async (data: any) =>{
-		const response = await axiosInstance.post(`categoria/create/`,data)
-		return response.data
-	}, 
+	update: async (data: FormData, images?: File[]) => {
+		const formData = data;
+
+		images?.forEach((image) => {
+			formData.append("images", image); // Append each file to the FormData
+		});
+		const insertProduct = await axiosInstance.post("categoria/update/", formData, {
+			headers: {
+				"Content-Type": "multipart/form-data",
+			},
+		});
+
+		return insertProduct?.data;
+	},
 	delete: async (id) =>{ 
 		const response = await axiosInstance.delete(`categoria/delete/${id}`)
 		return response.data

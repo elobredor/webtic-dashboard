@@ -1,11 +1,14 @@
 "use client";
-import { DataTable } from "webtic-ui";
+
 import { columns } from "./columnConfig";
 import useFetchData from "@/hooks/useFetchData";
 import { api } from "@/services/api";
 import { Eye } from "lucide-react";
 import { useState } from "react";
 import RequestDetailModal from "./components/DetailModal";
+import DataTable from "@/components/DataTable";
+
+
 
 // ajustar la data que se le pasa al modal, probar con unoq si tenga pdf
 // hacerr que se envie el cometario
@@ -51,7 +54,7 @@ export default function Request() {
 		<div>
 			<h1 className="text-2xl font-bold">Solicitudes</h1>
 			<p>Listado de solicitudes</p>
-			<DataTable data={data} columns={columnsWithActions} tableId={""}  onRefresh={refetch}/>
+			<DataTable totalRecords={data?.data?.length} pageSize={10}  data={data.data} columns={columnsWithActions} tableId={"request-table"}  onRefresh={refetch}/>
 			<RequestDetailModal
 				request={selectedRequest}
 				isOpen={modalOpen}

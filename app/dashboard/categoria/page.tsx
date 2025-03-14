@@ -1,49 +1,86 @@
 "use client";
 import React, { useState } from "react";
-import { DataTable } from "webtic-ui";
 import useFetchData from "@/hooks/useFetchData";
-import { api } from "@/services/api";
-
-import { Category } from "@/Models/Category";
-import DataModal from "@/components/DataModal";
+import { api } from "@/services/api"; 
 import { Eye, Edit, Trash } from "lucide-react";
 import { columns } from "./columnConfig";
+import DataTable from "@/components/DataTable"; 
+import { Category } from "@/Models/Categorie";
+import CategoryModal from "./modals/CategoryModal";
+import Alert from "@/components/Alert"; 
 
 const Categorias = () => {
   const { data, loading, refetch } = useFetchData(api.category.getAll, "category");
-  const [modalOpen, setModalOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
+  
+  // Alert state
+  const [alertState, setAlertState] = useState({
+    isOpen: false,
+    categoryToDelete: null
+  });
+  
+  // Unified modal state
+  const [modalState, setModalState] = useState({
+    isOpen: false,
+    mode: 'view', // 'view', 'create', or 'edit'
+    category: null
+  });
 
-  const handleView = (category: Category) => {
-    setSelectedCategory(category);
-    setIsEditing(false);
-    setModalOpen(true);
+  const openModal = (mode, category = null) => {
+    setModalState({
+      isOpen: true,
+      mode,
+      category
+    });
   };
 
-  const handleEdit = (category: Category) => {
-    setSelectedCategory(category);
-    setIsEditing(true);
-    setModalOpen(true);
+  const closeModal = () => {
+    setModalState({
+      isOpen: false,
+      mode: 'view',
+      category: null
+    });
   };
 
-  const handleDelete = async (category: Category) => {
+  const handleView = (category) => openModal('view', category);
+  const handleCreate = () => openModal('create');
+  const handleEdit = (category) => openModal('edit', category);
+
+  // This now opens the confirmation alert instead of deleting directly
+  const confirmDelete = (category) => {
+    setAlertState({
+      isOpen: true,
+      categoryToDelete: category
+    });
+  };
+  
+  // Actual delete function called after confirmation
+  const handleDelete = async () => {
     try {
-      await api.category.delete(category.id);
-      refetch();
+      if (alertState.categoryToDelete) {
+        await api.category.delete(alertState.categoryToDelete?.id);
+        refetch();
+        // Close the alert after successful deletion
+        setAlertState({
+          isOpen: false,
+          categoryToDelete: null
+        });
+      }
     } catch (error) {
       console.error("Error deleting category:", error);
+      // Close the alert even if there's an error
+      setAlertState({
+        isOpen: false,
+        categoryToDelete: null
+      });
     }
   };
-
-  const handleSave = async (updatedCategory: Category) => {
-    try {
-      await api.category.update(updatedCategory);
-      setModalOpen(false);
-      refetch();
-    } catch (error) {
-      console.error("Error updating category:", error);
-    }
+  
+  // Function to close the alert without deleting
+  const closeAlert = () => {
+    setAlertState({
+      isOpen: false,
+      categoryToDelete: null
+    });
   };
 
   const columnsWithActions = [
@@ -69,7 +106,7 @@ const Categorias = () => {
             <Edit className="h-4 w-4" />
           </button>
           <button
-            onClick={() => handleDelete(row)}
+            onClick={() => confirmDelete(row)} // Changed to confirmDelete
             className="px-4 py-2 border-2 border-red-500 text-red-500 rounded-md hover:bg-red-500 hover:text-white transition"
             title="Eliminar"
           >
@@ -84,25 +121,42 @@ const Categorias = () => {
     <div>
       <h1 className="text-2xl font-bold">Categorías</h1>
       <p>Listado de Categorías</p>
-
+      
       <DataTable
         columns={columnsWithActions}
         data={data?.data || []}
         tableId="categories-table"
         loading={loading}
+        onAdd={() => handleCreate()}
       />
-
-      {selectedCategory && (
-        <DataModal
-          isOpen={modalOpen}
-          onClose={() => setModalOpen(false)}
-          data={selectedCategory}
-          columns={columns}
-          title={isEditing ? "Editar Categoría" : "Detalles de la Categoría"}
-          isEditing={isEditing}
-          onSave={handleSave}
-        />
-      )}
+      
+      <Alert 
+        title="¿Estás seguro?" 
+        onAccept={handleDelete}
+        isOpen={alertState.isOpen}
+        onClose={closeAlert}
+        description="Eliminar una categoría puede afectar la visualización de algunos productos en la página principal"
+      />
+      
+      <CategoryModal
+        isOpen={modalState.isOpen}
+        mode={modalState.mode}
+        category={modalState.category}
+        onClose={closeModal}
+        onSave={async (categoryData) => {
+          try {
+            if (modalState.mode === 'edit') {
+              await api.category.update(categoryData);
+            } else if (modalState.mode === 'create') {
+              await api.category.create(categoryData);
+            }
+            closeModal();
+            refetch();
+          } catch (error) {
+            console.error("Error saving category:", error);
+          }
+        }}
+      />
     </div>
   );
 };

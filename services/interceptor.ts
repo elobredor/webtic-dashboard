@@ -35,7 +35,7 @@ api.interceptors.response.use(
 	async (error) => {
 		if (error.response?.status === 401) {
 			localStorage.clear();
-			window.location.href = "/mercabaq/login";
+			window.location.href = "/auth/login";
 			return Promise.reject(error);
 		}
 		return Promise.reject(error);

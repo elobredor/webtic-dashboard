@@ -1,7 +1,7 @@
 "use client";
 import useFetchData from "@/hooks/useFetchData";
 import { api } from "@/services/api";
-import { DataTable } from "webtic-ui";
+import DataTable from "@/components/DataTable";
 
 export default function Clientes() {
 	const { data } = useFetchData(api.user.getAll, "user");
@@ -23,13 +23,13 @@ export default function Clientes() {
 		},
 		{ Header: "Phone", accessor: "telefono", key: "telefono", title: "Teléfono" },
 		{ Header: "Email", accessor: "email", key: "email", title: "Email" },
-		{
-			Header: "Birth Date",
-			accessor: "fechaNacimiento",
-			key: "fechaNacimiento",
-			title: "Fecha de nacimiento",
-		},
-		{ Header: "Role", accessor: "rol", key: "rol", title: "Rol" },
+		// {
+		// 	Header: "Birth Date",
+		// 	accessor: "fechaNacimiento",
+		// 	key: "fechaNacimiento",
+		// 	title: "Fecha de nacimiento",
+		// },
+		// { Header: "Role", accessor: "rol", key: "rol", title: "Rol" },
 	];
 	return (
 		<div>

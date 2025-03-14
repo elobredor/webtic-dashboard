@@ -1,7 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
-import DataTable from "@/components/DataTable/DataTable";
+
 import { api } from "@/services/api";
+import DataTable from "@/components/DataTable";
+
 
 export default function Vendedores() {
   const [data, setData] = useState([]);
@@ -93,6 +95,8 @@ export default function Vendedores() {
         onPageChange={handlePageChange}
         onPageSizeChange={handlePageSizeChange}
         onFetchData={fetchVendedores}
+  
+        
       />
     </div>
   );

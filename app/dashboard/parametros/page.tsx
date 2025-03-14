@@ -1,10 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { DataTable } from "webtic-ui";
+
 import useFetchData from "@/hooks/useFetchData";
 import { api } from "@/services/api";
 import { Eye, Pencil, Save } from "lucide-react";
 import Modal from "@/components/Modal/Modal";
+import DataTable from "@/components/DataTable";
 
 interface Parametro {
     id: number;

@@ -1,11 +1,27 @@
 import { formatCurrency } from "@/utils/formatters";
+import Image from "next/image";
 
 export const columns = [
+	
 	{
 		key: "id",
 		title: "ID",
 		sortable: true,
 		editable: false,
+	},
+	{
+		key: "image",
+		title: "Imagen",
+		sortable: false,
+		render: (value: string) => (
+			<Image
+				src={value}
+				alt="Producto"
+				width={64}
+				height={64}
+				className="object-cover rounded-lg"
+			/>
+		),
 	},
 	{
 		key: "name",
@@ -121,10 +137,5 @@ export const columns = [
 			<span>{value || "Sin información"}</span>
 		),
 	},
-	{
-		key: "sales",
-		title: "Ventas",
-		sortable: true,
-		type: "number",
-	},
+	
 ];

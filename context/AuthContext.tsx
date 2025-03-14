@@ -109,6 +109,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 		console.log("🔴 Cerrando sesión...");
 		storage.clearAuth();
 		setUnauthenticated();
+		router.push('/auth/login')
 	};
 
 	const clearError = () => {

@@ -1,12 +1,13 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { DataTable } from "webtic-ui";
+import React, {  useState } from "react";
+
 import useFetchData from "@/hooks/useFetchData";
 import { api } from "@/services/api";
-import { Eye, MessageCircleQuestion } from "lucide-react";
+import { Eye} from "lucide-react";
 import { Order, OrderDetail } from "@/Models/Order";
 import Modal from "@/components/Modal/Modal";
 import { formatCurrency, formatDate } from "@/utils/formatters";
+import DataTable from "@/components/DataTable";
 
 const PedidosView = () => {
 	const { data, loading } = useFetchData(api.order.getAll, "products"); // ahora envio el string, este hook deberia 1. encontrar la interface PQR, 2. hacer devolver el formato de columnas

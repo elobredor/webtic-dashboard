@@ -3,8 +3,8 @@ import axiosInstance from "./axios.instance";
 export const RequestService = {
 	getAll: async () => {
 		const getFirst = await axiosInstance.get("/negocio/getAll");
-		const data = getFirst.data.data.data;
-		console.log(data, "desde servicio");
+		const data = getFirst.data.data;
+		
 
 		return data;
 	},

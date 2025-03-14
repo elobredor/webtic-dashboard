@@ -1,12 +1,13 @@
 "use client";
 import React, { useState } from "react";
-import { DataTable } from "webtic-ui";
+
 import useFetchData from "@/hooks/useFetchData";
 import { api } from "@/services/api";
 import { columns } from "./columnConfig";
 import { Product } from "@/Models/Product";
 import DataModal from "@/components/DataModal";
 import { Eye, Edit} from "lucide-react";
+import DataTable from "@/components/DataTable";
 
 const ProductsView = () => {
 	const { data, loading, refetch } = useFetchData(api.product.getAll, "products");
