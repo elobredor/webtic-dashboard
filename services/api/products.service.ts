@@ -4,11 +4,11 @@ import { ProductFilters } from "../../Models/Filters/Filters";
 import { buildQueryString } from "../../utils/filterUtils";
 
 export const productService = {
-	getAll: async (query: string = "") => {
-		const response = await axiosInstance.get(
-			`/producto/getPag?page=1${query === "" ? "" : `&filtro=${query}`}`
-		);
-		return response?.data?.data;
+	getAll: async (page: number) => {
+		const url = `/producto/getPag?page=${page}`;
+		const response = await axiosInstance.get(url);
+
+		return response;
 	},
 	getProductById: async (id: string) => {
 		const response = await axiosInstance.get(`/producto/get/${id}`);
@@ -97,5 +97,4 @@ export const productService = {
 			return response?.data?.data;
 		} catch (error) {}
 	},
-	
 };

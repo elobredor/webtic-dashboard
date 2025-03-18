@@ -8,14 +8,19 @@ import { useState } from "react";
 import RequestDetailModal from "./components/DetailModal";
 import DataTable from "@/components/DataTable";
 
-
-
-// ajustar la data que se le pasa al modal, probar con unoq si tenga pdf
-// hacerr que se envie el cometario
-// de una ir a corregir lo de cuando se envia la solicitud en mercabaq
-
 export default function Request() {
-	const { data, refetch } = useFetchData(api.request.getAll, "request");
+	const fetchRequest = async (page: number) => {
+		try {
+			const response = await api.request.getAll(page || 1);
+			return {
+				data: response?.data?.data || [],
+				total: response?.data?.total || 0,
+			};
+		} catch (error) {
+			console.error("Error al cargar vendedores:", error);
+			return { data: [], total: 0 };
+		}
+	};
 	const [modalOpen, setModalOpen] = useState(false);
 	const [selectedRequest, setSelectedRequest] = useState(null);
 
@@ -54,12 +59,16 @@ export default function Request() {
 		<div>
 			<h1 className="text-2xl font-bold">Solicitudes</h1>
 			<p>Listado de solicitudes</p>
-			<DataTable totalRecords={data?.data?.length} pageSize={10}  data={data.data} columns={columnsWithActions} tableId={"request-table"}  onRefresh={refetch}/>
+			<DataTable
+				columns={columnsWithActions}
+				tableId={"request-table"}
+				fetchFunction={fetchRequest}
+			/>
 			<RequestDetailModal
 				request={selectedRequest}
 				isOpen={modalOpen}
 				onClose={handleCloseModal}
-				refetch={refetch}
+				refetch={fetchRequest}
 			/>
 		</div>
 	);

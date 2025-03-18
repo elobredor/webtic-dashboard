@@ -1,11 +1,9 @@
 import axiosInstance from "./axios.instance";
 
 export const RequestService = {
-	getAll: async () => {
-		const getFirst = await axiosInstance.get("/negocio/getAll");
-		const data = getFirst.data.data;
-		
-
+	getAll: async (page: number) => {
+		const url = page ? `/negocio/getAll?page=${page}` : `/negocio/getAll`;
+		const { data } = await axiosInstance.get(url);
 		return data;
 	},
 	sendComment: async (comentInfo: any) => {

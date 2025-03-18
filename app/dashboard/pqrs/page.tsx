@@ -9,7 +9,19 @@ import { columns } from "./columnConfig";
 import DataTable from "@/components/DataTable";
 
 const PqrTable = () => {
-	const { data, loading } = useFetchData(api.pqr.getAllPqrs, "pqr"); // ahora envio el string, este hook deberia 1. encontrar la interface PQR, 2. hacer devolver el formato de columnas
+	const fetchPqrs = async (page: number = 1) => {
+		try {
+			const response = await api.pqr.getAllPqrs(page);
+			return {
+				data: response?.data?.data || [],
+				total: response?.data?.total || 0,
+			};
+		} catch (error) {
+			console.error("Error al cargar vendedores:", error);
+			return { data: [], total: 0 };
+		}
+	};
+
 	const [modalOpen, setModalOpen] = useState(false);
 	const [selectedPQR, setSelectedPQR] = useState<PQR | undefined>();
 
@@ -42,9 +54,8 @@ const PqrTable = () => {
 
 			<DataTable
 				columns={columns}
-				data={data}
 				tableId="pqrs-table"
-				loading={loading}
+				fetchFunction={fetchPqrs}
 				renderActions={renderActions}
 			/>
 		</div>

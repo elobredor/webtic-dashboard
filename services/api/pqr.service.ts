@@ -44,25 +44,11 @@ export const PQRService = {
 
 		return combinedData;
 	},
-	getAllPqrs: async () => {
-		const getFirst = await axiosInstance.get("/pqr/getAllPqrs");
-		const pages = getFirst.data.data.pages;
-		const page1Response = getFirst;
-		const responses = [page1Response];
 
-		if (pages >= 2) {
-			const page2Response = await axiosInstance.get("/pqr/getAllPqrs?page=2");
-			responses.push(page2Response);
-		}
-
-		if (pages >= 3) {
-			const page3Response = await axiosInstance.get("/pqr/getAllPqrs?page=3");
-			responses.push(page3Response);
-		}
-
-		const combinedData = responses.flatMap((response) => response.data.data.data);
-
-		return combinedData;
+	getAllPqrs: async (page: number) => {
+		const url = page ? `/pqr/getAllPqrs?page=${page}` : `/pqr/getAllPqrs`;
+		const response = await axiosInstance.get(url);
+		return response.data;
 	},
 	sendComment: async (comentInfo: any) => {
 		const response = await axiosInstance.post(`/comentario/create/`, comentInfo, {

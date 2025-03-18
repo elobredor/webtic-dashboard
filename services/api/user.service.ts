@@ -37,11 +37,13 @@ export const userService = {
 	getAll: async (page?: number) => {
 		const url = page ? `/user/get?page=${page}` : `/user/get/`;
 		const response = await axiosInstance.get(url);
-		return response?.data;
+		return response;
 	},
 	getSeller: async (page?: number) => {
-		const url = page ? `/negocio/getvendpag?page=${page}` : `/negocio/getvendpag?`;
+		const url = page
+			? `/negocio/getvendpag?page=${page}`
+			: `/negocio/getvendpag?`;
 		const response = await axiosInstance.get(url);
 		return response?.data;
-	}
+	},
 };

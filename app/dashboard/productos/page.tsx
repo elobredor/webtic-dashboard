@@ -1,16 +1,26 @@
 "use client";
 import React, { useState } from "react";
-
-import useFetchData from "@/hooks/useFetchData";
 import { api } from "@/services/api";
 import { columns } from "./columnConfig";
 import { Product } from "@/Models/Product";
 import DataModal from "@/components/DataModal";
-import { Eye, Edit} from "lucide-react";
+import { Eye, Edit } from "lucide-react";
 import DataTable from "@/components/DataTable";
 
 const ProductsView = () => {
-	const { data, loading, refetch } = useFetchData(api.product.getAll, "products");
+	const fetchProducts = async (page: number = 1) => {
+		try {
+			const response = await api.product.getAll(page);
+			return {
+				data: response?.data?.data?.data || [],
+				total: response?.data?.total || 0,
+			};
+		} catch (error) {
+			console.error("Error al cargar vendedores:", error);
+			return { data: [], total: 0 };
+		}
+	};
+
 	const [modalOpen, setModalOpen] = useState(false);
 	const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 	const [isEditing, setIsEditing] = useState(false);
@@ -29,10 +39,10 @@ const ProductsView = () => {
 
 	const handleSave = async (updatedProduct: Product) => {
 		try {
-			  await api.product.update(updatedProduct)
+			await api.product.update(updatedProduct);
 
 			setModalOpen(false);
-			refetch()
+			fetchProducts();
 		} catch (error) {
 			console.error("Error updating product:", error);
 		}
@@ -72,9 +82,8 @@ const ProductsView = () => {
 
 			<DataTable
 				columns={columnsWithActions}
-				data={data.data}
 				tableId="products-table"
-				loading={loading}
+				fetchFunction={fetchProducts}
 			/>
 
 			{selectedProduct && (

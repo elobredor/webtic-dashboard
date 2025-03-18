@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 
-const useFetchData = (fetchFn: Function, type: string) => {
+const useFetchData = (fetchFn: () => Promise<any>) => {
 	const [data, setData] = useState([]);
 	const [loading, setLoading] = useState(true);
 	const [refetchIndex, setRefetchIndex] = useState(0);
 
 	const refetch = useCallback(() => {
-		setRefetchIndex(prevIndex => prevIndex + 1);
+		setRefetchIndex((prevIndex) => prevIndex + 1);
 	}, []);
 
 	useEffect(() => {
@@ -23,7 +23,7 @@ const useFetchData = (fetchFn: Function, type: string) => {
 		};
 
 		fetchData();
-	}, [fetchFn, type, refetchIndex]);
+	}, [fetchFn, refetchIndex]);
 
 	return { data, loading, refetch };
 };
