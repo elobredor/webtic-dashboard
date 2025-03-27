@@ -106,7 +106,6 @@ const CategoryModal: React.FC<CategoryModalProps> = ({
 
 				{!isViewOnly && (
 					<MultiFileInput
-						// previewImages={[category?.image?.toString() || ""]}
 						label="Selecciona imágenes"
 						files={files}
 						onChange={setFiles}
@@ -120,8 +119,8 @@ const CategoryModal: React.FC<CategoryModalProps> = ({
 							src={category.image}
 							alt="Imagen actual"
 							className="mt-2 w-full h-auto rounded-md border"
-							width={500}
-							height={500}
+							width={250}
+							height={250}
 						/>
 					</div>
 				)}

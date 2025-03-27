@@ -1,7 +1,7 @@
 import axiosInstance from "./axios.instance";
 
 export const CategoryService = {
-	getAll: async (page: number) => {
+	getAll: async (page: number = 1) => {
 		const url = page ? `/categoria/get?page=${page}` : `/categoria/get`;
 		const data = await axiosInstance.get(url);
 

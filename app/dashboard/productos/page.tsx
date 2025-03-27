@@ -1,13 +1,14 @@
 "use client";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { api } from "@/services/api";
 import { columns } from "./columnConfig";
 import { Product } from "@/Models/Product";
-import DataModal from "@/components/DataModal";
+import EntityModal from "@/components/EntityModal";
 import { Eye, Edit } from "lucide-react";
 import DataTable from "@/components/DataTable";
 
 const ProductsView = () => {
+	const dataTableRef = useRef<{ handleRefresh: () => void } | null>(null);
 	const fetchProducts = async (page: number = 1) => {
 		try {
 			const response = await api.product.getAll(page);
@@ -16,35 +17,34 @@ const ProductsView = () => {
 				total: response?.data?.total || 0,
 			};
 		} catch (error) {
-			console.error("Error al cargar vendedores:", error);
+			console.error("Error al cargar productos:", error);
 			return { data: [], total: 0 };
 		}
 	};
 
 	const [modalOpen, setModalOpen] = useState(false);
 	const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-	const [isEditing, setIsEditing] = useState(false);
+	const [mode, setMode] = useState<"view" | "edit">("view");
 
 	const handleView = (product: Product) => {
 		setSelectedProduct(product);
-		setIsEditing(false);
+		setMode("view");
 		setModalOpen(true);
 	};
 
 	const handleEdit = (product: Product) => {
 		setSelectedProduct(product);
-		setIsEditing(true);
+		setMode("edit");
 		setModalOpen(true);
 	};
 
-	const handleSave = async (updatedProduct: Product) => {
+	const handleSave = async (updatedProduct: FormData) => {
 		try {
 			await api.product.update(updatedProduct);
-
 			setModalOpen(false);
-			fetchProducts();
+			dataTableRef.current?.handleRefresh(); // 🔄 Refresca la tabla
 		} catch (error) {
-			console.error("Error updating product:", error);
+			console.error("Error al actualizar el producto:", error);
 		}
 	};
 
@@ -84,17 +84,18 @@ const ProductsView = () => {
 				columns={columnsWithActions}
 				tableId="products-table"
 				fetchFunction={fetchProducts}
+				ref={dataTableRef}
 			/>
 
 			{selectedProduct && (
-				<DataModal
+				<EntityModal
 					isOpen={modalOpen}
 					onClose={() => setModalOpen(false)}
-					data={selectedProduct}
-					columns={columnsWithActions}
-					title={isEditing ? "Editar Producto" : "Detalles del Producto"}
-					isEditing={isEditing}
+					entity={selectedProduct}
+					mode={mode}
 					onSave={handleSave}
+					title={mode === "edit" ? "Editar Producto" : "Detalles del Producto"}
+					columns={columns}
 				/>
 			)}
 		</div>

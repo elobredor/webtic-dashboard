@@ -8,7 +8,8 @@ interface DataTableBodyProps {
 	onView?: (item: any) => void;
 	onEdit?: (item: any) => void;
 	onDelete?: (item: any) => void;
-	renderActions?: (item: any) => React.ReactNode;
+	renderActions?: (item: any, onRefresh: () => void) => React.ReactNode;
+	handleRefresh: () => void;
 	tableId: string;
 	loading?: boolean;
 }
@@ -20,11 +21,11 @@ const DataTableBody: FC<DataTableBodyProps> = ({
 	onEdit,
 	onDelete,
 	renderActions,
+	handleRefresh,
 	tableId,
 	loading = false,
 }) => {
 	if (loading) {
-		// Crear 10 filas de skeleton loading
 		return (
 			<>
 				{Array(10)
@@ -39,7 +40,6 @@ const DataTableBody: FC<DataTableBodyProps> = ({
 									<div className="h-5 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
 								</td>
 							))}
-							{/* Skeleton para columna de acciones */}
 							{(onView || onEdit || onDelete || renderActions) && (
 								<td className="px-6 py-4 text-right">
 									<div className="flex gap-2 justify-end">
@@ -89,24 +89,26 @@ const DataTableBody: FC<DataTableBodyProps> = ({
 								: item[column.key.trim()]}
 						</td>
 					))}
-					{/* Renderiza acciones */}
-					{(onView || onEdit || onDelete || renderActions) && (
-						<td className="px-6 py-4 text-right">
-							<div className="flex gap-2">
-								{onView && (
-									<button
-										onClick={() => onView(item)}
-										className="px-4 py-2 border-2 border-green-400 text-green-400 rounded-md hover:bg-green-400 hover:text-white transition cursor-pointer"
-										title="Ver detalles"
-									>
-										<Eye />
-									</button>
-								)}
+					<td className="px-6 py-4 text-right">
+						<div className="flex gap-2">
+							{onView && (
+								<button
+									onClick={() => onView(item)}
+									className="px-4 py-2 border-2 border-green-400 text-green-400 rounded-md hover:bg-green-400 hover:text-white transition cursor-pointer"
+									title="Ver detalles"
+								>
+									<Eye />
+								</button>
+							)}
 
-								{renderActions && renderActions(item)}
-							</div>
-						</td>
-					)}
+							{renderActions &&
+								renderActions(
+									item,
+									handleRefresh
+									// Pasamos handleRefresh como parte del item
+								)}
+						</div>
+					</td>
 				</tr>
 			))}
 		</>

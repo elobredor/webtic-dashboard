@@ -1,6 +1,5 @@
 "use client";
 import React, { useState } from "react";
-import useFetchData from "@/hooks/useFetchData";
 import { api } from "@/services/api";
 import { Eye, Edit, Trash } from "lucide-react";
 import { columns } from "./columnConfig";

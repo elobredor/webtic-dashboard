@@ -1,28 +1,29 @@
+"use client";
+import { api } from "@/services/api";
 import { formatCurrency } from "@/utils/formatters";
 import Image from "next/image";
 
 export const columns = [
-	
 	{
 		key: "id",
 		title: "ID",
 		sortable: true,
 		editable: false,
 	},
-	{
-		key: "image",
-		title: "Imagen",
-		sortable: false,
-		render: (value: string) => (
-			<Image
-				src={value}
-				alt="Producto"
-				width={64}
-				height={64}
-				className="object-cover rounded-lg"
-			/>
-		),
-	},
+	// {
+	// 	key: "image",
+	// 	title: "Imagen",
+	// 	sortable: false,
+	// 	render: (value: string) => (
+	// 		<Image
+	// 			src={value}
+	// 			alt="Producto"
+	// 			width={64}
+	// 			height={64}
+	// 			className="object-cover rounded-lg"
+	// 		/>
+	// 	),
+	// },
 	{
 		key: "name",
 		title: "Nombre",
@@ -30,21 +31,6 @@ export const columns = [
 		type: "text",
 	},
 
-	{
-		key: "freeShipping",
-		title: "Envío Gratis",
-		sortable: true,
-		type: "boolean",
-		render: (value: boolean) => (
-			<span
-				className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-					value ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"
-				}`}
-			>
-				{value ? "Sí" : "No"}
-			</span>
-		),
-	},
 	{
 		key: "status",
 		title: "Estado",
@@ -95,7 +81,8 @@ export const columns = [
 		key: "nombrecategoria",
 		title: "Categoría",
 		sortable: true,
-		type: "text",
+		type: "select",
+		get: api.category.getAll,
 	},
 	{
 		key: "nombremarca",
@@ -132,10 +119,9 @@ export const columns = [
 		title: "Vendedor",
 		sortable: true,
 		type: "text",
-		editable: false, 
+		editable: false,
 		render: (value: string | undefined) => (
 			<span>{value || "Sin información"}</span>
 		),
 	},
-	
 ];
